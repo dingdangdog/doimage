@@ -41,7 +41,13 @@ const deleteAlert = (id: string) => {
 .alert-container {
   position: absolute;
   top: 8%;
-  left: 5%;
+  left: 18%;
+}
+
+@media screen and (max-width: 1280px) {
+  .alert-container {
+    left: 5%;
+  }
 }
 
 .v-alert {

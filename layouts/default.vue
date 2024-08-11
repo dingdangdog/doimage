@@ -24,7 +24,7 @@
       </template>
       <template v-slot:append>
         <v-icon
-          color="green-darken-2"
+          color="#f6467c"
           icon="mdi-exit-to-app"
           size="large"
           @click="logout"

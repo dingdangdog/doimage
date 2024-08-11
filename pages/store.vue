@@ -34,7 +34,7 @@
           aspect-ratio="1"
           class="image bg-grey-lighten-2"
           @click="openFullscreen(image)"
-        @contextmenu="showMenu(image)"
+          @contextmenu.prevent="showMenu(image)"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" justify="center" align="center">
@@ -52,10 +52,10 @@
       <v-col cols="3" sm="5">
         <div style="text-align: right">Total:{{ total }}</div>
       </v-col>
-      <v-col cols="4" sm="3">
+      <v-col cols="4" sm="1">
         <v-text-field label="Page Size" v-model="page.size"></v-text-field>
       </v-col>
-      <v-col cols="4" sm="3">
+      <v-col cols="4" sm="1">
         <v-text-field label="Page" v-model="page.page"></v-text-field>
       </v-col>
       <v-col cols="1" sm="1">
@@ -98,7 +98,7 @@ const iamges = ref<any[]>([]);
 const total = ref(0);
 const page = ref({
   page: 1,
-  size: 20,
+  size: 40,
 });
 
 const changeFolder = () => {
