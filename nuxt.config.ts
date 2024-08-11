@@ -13,7 +13,7 @@ export default defineNuxtConfig({
       ],
     },
   },
-  ssr: true,
+  // ssr: true,
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   $development: {},
@@ -24,7 +24,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     // The private keys which are only available server-side
-    apiSecret: "123",
+    apiSecret: "",
+    domain:"",
     // Keys within public are also exposed client-side
     public: {
       apiBase: "/api",

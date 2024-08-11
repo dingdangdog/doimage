@@ -1,10 +1,15 @@
 {
-  "title": "{ait}老哥",
-  "hello": "欢迎",
+  "title": "Doimage",
   "menu": {
-    "menu1": "菜单1",
-    "menu2": "菜单2",
-    "menu3": "菜单3",
-    "menu4": "菜单4"
-  }
+    "login": "登录",
+    "upload": "上传",
+    "store": "图库"
+  },
+  "index": {
+    "select-folder": "选择文件夹",
+    "select-image": "选择图片",
+    "upload": "上传",
+    "file": "文件"
+  },
+  "hello": "欢迎"
 }
