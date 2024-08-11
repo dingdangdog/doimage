@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
     const metadata = await image.metadata();
     const width = metadata.width || 250;
     const height = metadata.height || 200;
-    if (watermark) {
+    if (watermark && watermark != "null") {
       try {
         image = image.composite([
           {
