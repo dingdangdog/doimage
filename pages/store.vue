@@ -1,22 +1,40 @@
 <template>
   <div class="main-page">
-    <div class="text-center row-input">
-      <v-select
-        chips
-        :label="$t('index.select-folder')"
-        :items="folders"
-        v-model="folder"
-        @update:model-value="changeFolder"
-      ></v-select>
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+      "
+    >
+      <div style="max-width: 30rem; min-width: 20rem">
+        <v-select
+          chips
+          :label="$t('index.select-folder')"
+          :items="folders"
+          v-model="folder"
+          @update:model-value="changeFolder"
+        ></v-select>
+      </div>
+      <v-icon
+        icon="mdi-refresh"
+        style="margin: 0.5rem; margin-top: -1rem"
+        @click="refresh"
+      ></v-icon>
     </div>
 
     <div class="images-container">
-      <div class="image-div" v-for="image in iamges">
+      <div
+        class="image-div"
+        v-for="image in iamges"
+      >
         <v-img
           :src="image"
           aspect-ratio="1"
           class="image bg-grey-lighten-2"
           @click="openFullscreen(image)"
+        @contextmenu="showMenu(image)"
         >
           <template v-slot:placeholder>
             <v-row class="fill-height ma-0" justify="center" align="center">
@@ -30,15 +48,17 @@
       </div>
     </div>
 
-    <v-row style="width: 100%">
-      <v-col cols="1"></v-col>
-      <v-col cols="5">
-        <v-text-field label="Size" v-model="page.size"></v-text-field>
+    <v-row style="width: 100%; margin-top: 0.5rem">
+      <v-col cols="3" sm="5">
+        <div style="text-align: right">Total:{{ total }}</div>
       </v-col>
-      <v-col cols="5">
+      <v-col cols="4" sm="3">
+        <v-text-field label="Page Size" v-model="page.size"></v-text-field>
+      </v-col>
+      <v-col cols="4" sm="3">
         <v-text-field label="Page" v-model="page.page"></v-text-field>
       </v-col>
-      <v-col cols="1">
+      <v-col cols="1" sm="1">
         <div class="page-actions">
           <v-icon
             icon="mdi-menu-up"
@@ -52,6 +72,9 @@
           ></v-icon>
         </div>
       </v-col>
+      <!-- <v-col cols="2" sm="2">
+        总页数：{{ Math.ceil(total / page.size) }}
+      </v-col> -->
     </v-row>
   </div>
 
@@ -85,9 +108,17 @@ const changeFolder = () => {
 
   getImages();
 
-  doApi("/api/getTotalImage", { folder: folder.value }).then((res) => {
-    total.value = Number(res);
-  });
+  doApi("/api/getTotalImage", { folder: folder.value })
+    .then((res) => {
+      total.value = Number(res);
+    })
+    .catch((err) => {
+      errorAlert("Api Error");
+    });
+};
+
+const refresh = () => {
+  changeFolder();
 };
 
 const pageUp = () => {
@@ -106,7 +137,7 @@ const fullscreenImage = ref("");
 
 const openFullscreen = (image: string) => {
   fullscrenn.value = true;
-  fullscreenImage.value = image;
+  fullscreenImage.value = image.replace("/thumbs", "");
   window.addEventListener("keydown", handleKeydown);
 };
 const closeFullscreen = () => {
@@ -120,15 +151,24 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
+const showMenu = (image: string) => {
+  // window.preventDefault();
+  
+  console.log(image);
+};
 onMounted(() => {
-  doApi("/api/getFolders", {}).then((res) => {
-    // folders.value = res;
-    folders.value = Array.isArray(res) ? res : [];
-  });
+  check();
+  doApi("/api/getFolders", {})
+    .then((res) => {
+      folders.value = Array.isArray(res) ? res : [];
+    })
+    .catch((err) => {
+      errorAlert("Api Error");
+    });
+  folder.value = String(window.localStorage.getItem("folder") || "");
 });
 
 watch(page.value, () => {
-  // console.log("page change");
   getImages();
 });
 
@@ -137,10 +177,14 @@ const getImages = () => {
     folder: folder.value,
     start: (page.value.page - 1) * page.value.size,
     num: page.value.size,
-  }).then((res) => {
-    // iamges.value = res;
-    iamges.value = Array.isArray(res) ? res : [];
-  });
+  })
+    .then((res) => {
+      successAlert("Success");
+      iamges.value = Array.isArray(res) ? res : [];
+    })
+    .catch(() => {
+      errorAlert("Api Error");
+    });
 };
 </script>
 

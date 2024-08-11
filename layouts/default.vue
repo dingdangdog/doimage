@@ -43,7 +43,10 @@
         </v-tabs>
       </v-app-bar-title>
     </v-app-bar>
-    <v-main> <slot></slot> </v-main>
+    <v-main>
+      <slot></slot>
+      <GlobalAlert />
+    </v-main>
   </v-layout>
 </template>
 

@@ -2,7 +2,12 @@
   <div class="main-page">
     <div class="index-container">
       <div class="text-center row-input">
-        <v-text-field clearable label="Key" v-model="serverKey"></v-text-field>
+        <v-text-field
+          prepend-icon="mdi-key"
+          clearable
+          label="Key"
+          v-model="serverKey"
+        ></v-text-field>
       </div>
 
       <div class="text-center">
@@ -23,7 +28,7 @@ const login = () => {
 };
 
 onMounted(() => {
-  serverKey.value = String(window.localStorage.getItem("key"));
+  serverKey.value = window.localStorage.getItem("key") || "";
 });
 </script>
 
@@ -48,5 +53,4 @@ onMounted(() => {
 .row-input {
   width: 20rem;
 }
-
 </style>

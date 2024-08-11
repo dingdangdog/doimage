@@ -12,7 +12,9 @@ export default defineEventHandler(async (event) => {
     const resFiles = files.slice(start, end);
     const config = await useRuntimeConfig(event);
     const domain = config.domain;
-    const urls = resFiles.map((file) => `${domain}/${body.folder}/${file}`);
+    const urls = resFiles.map(
+      (file) => `${domain}/images/${body.folder}/thumbs/${file}`
+    );
     return urls;
   }
 
@@ -20,7 +22,7 @@ export default defineEventHandler(async (event) => {
 });
 
 const getFileList = (dir: string): string[] => {
-  const folderPath = path.join(process.cwd(), "public", dir);
+  const folderPath = path.join(process.cwd(), "public/images", dir, "thumbs");
   let imageList: string[] = [];
 
   try {

@@ -7,8 +7,11 @@
   },
   "login": "Login",
   "index": {
-    "select-folder": "Select Folder",
+    "select-folder": "Select Store Folder",
     "select-image": "Select Images",
+    "watermark": "WaterMark Info",
+    "set": "Set Mark",
+    "unset": "UnSet Mark",
     "upload": "Update",
     "file": "File"
   },

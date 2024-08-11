@@ -6,8 +6,11 @@
     "store": "图库"
   },
   "index": {
-    "select-folder": "选择文件夹",
+    "select-folder": "选择存储文件夹",
     "select-image": "选择图片",
+    "watermark":"水印内容",
+    "set": "设置水印",
+    "unset": "不设置水印",
     "upload": "上传",
     "file": "文件"
   },
