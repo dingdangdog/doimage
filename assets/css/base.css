@@ -8,7 +8,7 @@
   min-height: 100% !important;
 }
 
-.v-row div {
+.v-row > div {
   padding: 0 !important;
 }
 

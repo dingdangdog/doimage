@@ -18,7 +18,7 @@
           :width="40"
           aspect-ratio="1/1"
           cover
-          src="https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png"
+          src="/Doimage.png"
         ></v-img>
         <span class="title">{{ $t("title") }}</span>
       </template>

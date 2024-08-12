@@ -8,7 +8,7 @@ export default defineNuxtConfig({
         // <link rel="stylesheet" href="https://myawesome-lib.css">
         {
           rel: "icon",
-          href: "https://images.oldmoon.top/images/dingdangdog/dingdangdog1679378444620.png",
+          href: "./Doimage.png",
         },
       ],
     },
