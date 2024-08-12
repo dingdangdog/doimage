@@ -32,14 +32,16 @@
         ></v-icon>
       </template>
       <v-app-bar-title>
-        <v-tabs v-model="tab">
-          <v-tab value="/" @click="toPage('/')">{{ $t("menu.login") }}</v-tab>
-          <v-tab value="upload" @click="toPage('upload')">{{
-            $t("menu.upload")
-          }}</v-tab>
-          <v-tab value="store" @click="toPage('store')">{{
-            $t("menu.store")
-          }}</v-tab>
+        <v-tabs v-model="tab" color="rgba(246, 70, 124)">
+          <v-tab value="login" @click="toPage('login')">
+            {{ $t("menu.login") }}
+          </v-tab>
+          <v-tab value="upload" @click="toPage('upload')">
+            {{ $t("menu.upload") }}
+          </v-tab>
+          <v-tab value="store" @click="toPage('store')">
+            {{ $t("menu.store") }}
+          </v-tab>
         </v-tabs>
       </v-app-bar-title>
     </v-app-bar>
@@ -54,15 +56,19 @@
 import { useRoute } from "vue-router";
 
 const route = useRoute();
-const tab = ref("/");
-tab.value = route.path == "/" ? "/" : route.path.replace("/", "");
+const tab = ref(route.path == "/" ? "login" : route.path.replace("/", ""));
 
 const toPage = (path: string) => {
-  navigateTo(path);
   tab.value = path;
+  if (path == "login") {
+    path = "/";
+  }
+  navigateTo(path);
+  // tab.value = path == "/" ? "login" : path;
 };
 
 const logout = () => {
+  warningAlert("Logout");
   window.localStorage.removeItem("key");
   navigateTo("/");
 };

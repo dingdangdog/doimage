@@ -90,3 +90,7 @@ export const infoAlert = (message: string) => {
 export const warningAlert = (message: string) => {
   alert("warning", message);
 };
+
+
+export const showDeleteDialog = ref(false)
+export const deleteImage = ref("")

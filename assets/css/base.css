@@ -8,6 +8,10 @@
   min-height: 100% !important;
 }
 
+.v-row div {
+  padding: 0 !important;
+}
+
 .main-page {
   height: 98%;
   /* min-height: 80%; */

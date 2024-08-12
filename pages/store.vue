@@ -11,6 +11,7 @@
       <div style="max-width: 30rem; min-width: 20rem">
         <v-select
           chips
+          bg-color="rgba(242, 197, 211, 0.5)"
           :label="$t('store.select-folder')"
           :items="folders"
           v-model="folder"
@@ -18,9 +19,10 @@
         ></v-select>
       </div>
       <v-btn
+        variant="outlined"
         :aria-label="$t('store.search')"
         icon="mdi-refresh"
-        color="primary"
+        color="rgba(246, 70, 124)"
         style="margin: 0.5rem; margin-top: -1rem"
         @click="refresh"
       ></v-btn>
@@ -44,19 +46,29 @@
           <div style="text-align: right">Total:{{ total }}</div>
         </v-col>
         <v-col cols="4" sm="2">
-          <v-text-field label="Page Size" v-model="page.size"></v-text-field>
+          <v-text-field
+            bg-color="rgba(242, 197, 211, 0.5)"
+            label="Page Size"
+            v-model="page.size"
+          ></v-text-field>
         </v-col>
         <v-col cols="4" sm="2">
-          <v-text-field label="Page" v-model="page.page"></v-text-field>
+          <v-text-field
+            bg-color="rgba(242, 197, 211, 0.5)"
+            label="Page"
+            v-model="page.page"
+          ></v-text-field>
         </v-col>
         <v-col cols="1" sm="1">
           <div class="page-actions">
             <v-icon
+              color="rgba(246, 70, 124)"
               icon="mdi-menu-up"
               class="page-action-icon"
               @click="pageDown"
             ></v-icon>
             <v-icon
+              color="rgba(246, 70, 124)"
               icon="mdi-menu-down"
               class="page-action-icon"
               @click="pageUp"
@@ -80,9 +92,19 @@
     />
     <span class="close-button" @click="closeFullscreen">&times;</span>
   </div>
+  <ImageMenu
+    v-if="showImageMenu"
+    :showMenu="showImageMenu"
+    :image="selectImage"
+    :x="menuPosition.x"
+    :y="menuPosition.y"
+  />
+  <DeleteDialog v-if="showDeleteDialog" />
 </template>
 
 <script setup lang="ts">
+import { showDeleteDialog } from "../utils";
+
 const folders = ref<any[]>([]);
 const folder = ref();
 const images = ref<any[]>([]);
@@ -126,7 +148,6 @@ const pageDown = () => {
 
 const fullscrenn = ref(false);
 const fullscreenImage = ref("");
-
 const openFullscreen = (image: string) => {
   fullscrenn.value = true;
   fullscreenImage.value = image.replace("/thumbs", "");
@@ -143,10 +164,17 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
+const selectImage = ref("");
+const showImageMenu = ref(false);
+const menuPosition = ref({ x: 0, y: 0 });
 const showMenu = (image: string) => {
   // window.preventDefault();
-
-  console.log(image);
+  selectImage.value = image;
+  menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
+  if (window.innerWidth > 1280) {
+    menuPosition.value.x -= 256;
+  }
+  showImageMenu.value = true;
 };
 onMounted(() => {
   check();
@@ -158,6 +186,10 @@ onMounted(() => {
       errorAlert("Api Error");
     });
   folder.value = String(window.localStorage.getItem("folder") || "");
+
+  document.addEventListener("click", (event) => {
+    showImageMenu.value = false;
+  });
 });
 
 watch(page.value, () => {
@@ -222,7 +254,7 @@ const getImages = () => {
 
 .page-action-icon {
   cursor: pointer;
-  border: 1px solid #ccc;
+  border: 1px solid #f6467c;
   margin: 0.2rem;
 }
 

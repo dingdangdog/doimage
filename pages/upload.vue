@@ -1,19 +1,34 @@
 <template>
   <div class="main-page">
-    <div style="width: 100%">
+    <div style="width: 100%; padding: 0.5rem;">
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
-            prepend-icon="mdi-water-opacity"
+            bg-color="rgba(242, 197, 211, 0.5)"
             :label="$t('upload.watermark')"
             v-model="watermark"
-          ></v-text-field>
+          >
+            <template v-slot:prepend>
+              <v-icon
+                icon="mdi-water-opacity"
+                color="rgba(246, 70, 124)"
+              ></v-icon>
+            </template>
+          </v-text-field>
         </v-col>
         <v-col cols="12" sm="4">
           <div class="text-center">
             <v-radio-group v-model="addWatermark" inline>
-              <v-radio :label="$t('upload.setmark')" value="1"></v-radio>
-              <v-radio :label="$t('upload.unsetmark')" value="2"></v-radio>
+              <v-radio
+                :label="$t('upload.setmark')"
+                value="1"
+                color="rgba(246, 70, 124)"
+              ></v-radio>
+              <v-radio
+                :label="$t('upload.unsetmark')"
+                value="2"
+                color="rgba(246, 70, 124)"
+              ></v-radio>
             </v-radio-group>
           </div>
         </v-col>
@@ -21,12 +36,16 @@
       <v-row>
         <v-col cols="10" sm="5">
           <v-select
-            prepend-icon="mdi-folder"
+            bg-color="rgba(242, 197, 211, 0.5)"
             chips
             :label="$t('upload.select-folder')"
             :items="folders"
             v-model="folder"
-          ></v-select>
+          >
+            <template v-slot:prepend>
+              <v-icon icon="mdi-folder" color="rgba(246, 70, 124)"></v-icon>
+            </template>
+          </v-select>
         </v-col>
         <v-col cols="2" sm="1">
           <div class="text-center">
@@ -34,7 +53,7 @@
               :aria-label="$t('upload.add-folder')"
               variant="outlined"
               @click="showAddFolder"
-              color="primary"
+              color="rgba(246, 70, 124)"
               icon="mdi-plus"
             >
             </v-btn>
@@ -42,15 +61,22 @@
         </v-col>
         <v-col cols="8" sm="4">
           <v-file-input
+            bg-color="rgba(242, 197, 211, 0.5)"
             :rules="rules"
             :label="$t('upload.select-image')"
             v-model="selectIamges"
             accept="image/png, image/jpeg, image/bmp"
             multiple
             counter
+            prepend-icon="mdi-minus"
             :show-size="1000"
-            prepend-icon="mdi-image-multiple"
           >
+            <template v-slot:prepend>
+              <v-icon
+                icon="mdi-image-multiple"
+                color="rgba(246, 70, 124)"
+              ></v-icon>
+            </template>
             <template v-slot:selection="{ fileNames }">
               <template v-for="(fileName, index) in fileNames" :key="fileName">
                 <v-chip
@@ -79,7 +105,7 @@
               variant="outlined"
               :disabled="uploading"
               @click="uploadImages"
-              color="primary"
+              color="rgba(246, 70, 124)"
             >
               {{ $t("upload.upload") }}
             </v-btn>
@@ -128,7 +154,7 @@
           <v-btn
             density="default"
             @click="addFolder"
-            color="blue-lighten-3"
+            color="rgba(246, 70, 124, 0.5)"
             variant="elevated"
           >
             Add
@@ -148,10 +174,21 @@
       />
       <span class="close-button" @click="closeFullscreen">&times;</span>
     </div>
+
+    <ImageMenu
+      v-if="showImageMenu"
+      :showMenu="showImageMenu"
+      :image="selectImage"
+      :x="menuPosition.x"
+      :y="menuPosition.y"
+    />
+    <DeleteDialog v-if="showDeleteDialog" />
   </div>
 </template>
 
 <script setup lang="ts">
+import { showDeleteDialog } from "../utils";
+
 const rules = ref([
   (value: File[]) => {
     for (let file of value) {
@@ -186,13 +223,13 @@ const addFolder = () => {
 };
 
 const showAddFolder = () => {
-  console.log("showAddFolder");
+  // console.log("showAddFolder");
   showAddFolderDialog.value = true;
 };
 
 const uploadImages = () => {
   uploading.value = true;
-  console.log(selectIamges.value);
+  // console.log(selectIamges.value);
 
   if (!folder.value || selectIamges.value.length <= 0) {
     errorAlert("Please select folder and upload images");
@@ -265,10 +302,17 @@ const handleKeydown = (event: KeyboardEvent) => {
   }
 };
 
+const selectImage = ref("");
+const showImageMenu = ref(false);
+const menuPosition = ref({ x: 0, y: 0 });
 const showMenu = (image: string) => {
   // window.preventDefault();
-
-  console.log(image);
+  selectImage.value = image;
+  menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
+  if (window.innerWidth > 1280) {
+    menuPosition.value.x -= 256;
+  }
+  showImageMenu.value = true;
 };
 
 onMounted(() => {
@@ -277,6 +321,10 @@ onMounted(() => {
 
   folder.value = String(window.localStorage.getItem("folder") || "");
   watermark.value = window.localStorage.getItem("watermark") || "";
+  // 隐藏菜单
+  document.addEventListener("click", (event) => {
+    showImageMenu.value = false;
+  });
 });
 </script>
 

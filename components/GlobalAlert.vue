@@ -27,8 +27,6 @@ const deleteAlert = (id: string) => {
       v-for="(alert, index) in Array.from(alertMap.values())"
       :key="index"
       :type="alert.type"
-      border="start"
-      variant="tonal"
       closable
       close-label="Close Alert"
       :text="alert.message"
@@ -40,8 +38,8 @@ const deleteAlert = (id: string) => {
 <style scoped>
 .alert-container {
   position: absolute;
-  top: 8%;
-  left: 18%;
+  bottom: 5%;
+  left: 5%;
 }
 
 @media screen and (max-width: 1280px) {
@@ -52,5 +50,6 @@ const deleteAlert = (id: string) => {
 
 .v-alert {
   margin-top: 0.2rem !important;
+  z-index: 9999;
 }
 </style>

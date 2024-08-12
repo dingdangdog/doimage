@@ -1,10 +1,6 @@
 <template>
   <div class="image-div">
-    <v-img
-      :src="image"
-      aspect-ratio="1"
-      class="image bg-grey-lighten-2"
-    >
+    <v-img :src="image" aspect-ratio="1" class="image">
       <template v-slot:placeholder>
         <v-row class="fill-height ma-0" justify="center" align="center">
           <v-progress-circular
@@ -15,12 +11,11 @@
       </template>
     </v-img>
   </div>
-
 </template>
 
 <script setup lang="ts">
 const { image } = defineProps(["image"]);
-console.log(image)
+// console.log(image)
 </script>
 
 <style scoped>
@@ -33,6 +28,7 @@ console.log(image)
 }
 
 .image {
+  background-color: rgba(242, 197, 211, 0.5);
   padding: 0.5rem;
   border-radius: 0.2rem;
   cursor: pointer;

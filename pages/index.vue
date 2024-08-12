@@ -3,16 +3,20 @@
     <div class="index-container">
       <div class="text-center row-input">
         <v-text-field
-          prepend-icon="mdi-key"
+          bg-color="rgba(242, 197, 211, 0.5)"
           clearable
           label="Key"
           v-model="serverKey"
           @keyup.enter="login"
-        ></v-text-field>
+        >
+          <template v-slot:prepend>
+            <v-icon icon="mdi-key" color="rgba(246, 70, 124)"></v-icon>
+          </template>
+        </v-text-field>
       </div>
 
       <div class="text-center">
-        <v-btn variant="outlined" @click="login" color="primary">
+        <v-btn variant="outlined" @click="login" color="rgba(246, 70, 124)">
           {{ $t("menu.login") }}
         </v-btn>
       </div>
