@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
 });
 
 const getFileList = (dir: string): string[] => {
-  const folderPath = path.join(process.cwd(), "public/images", dir, "thumbs");
+  const folderPath = path.join(process.cwd(), "images", dir, "thumbs");
   let imageList: string[] = [];
 
   try {

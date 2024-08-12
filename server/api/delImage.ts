@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
   if (url && url != "null") {
     const config = await useRuntimeConfig(event);
     const thumbFile = url.replace(config.domain, "");
-    const thumbFilePath = path.join(process.cwd(), "public", thumbFile);
+    const thumbFilePath = path.join(process.cwd(), thumbFile);
     try {
       // 删除缩略图文件
       console.log(thumbFilePath);

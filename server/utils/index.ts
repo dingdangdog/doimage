@@ -3,7 +3,7 @@ import * as path from "path";
 import crypto from "crypto";
 
 export const getFileList = (dir: string): string[] => {
-  const folderPath = path.join(process.cwd(), "public/images", dir, "thumbs");
+  const folderPath = path.join(process.cwd(), "images", dir, "thumbs");
   let imageList: string[] = [];
 
   try {
@@ -24,7 +24,7 @@ export const getFileList = (dir: string): string[] => {
 };
 
 export const getFolderList = (): string[] => {
-  const folderPath = path.join(process.cwd(), "public/images");
+  const folderPath = path.join(process.cwd(), "images");
   let folderList: string[] = [];
 
   try {

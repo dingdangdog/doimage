@@ -12,7 +12,7 @@ export default defineEventHandler(async (event) => {
   const folder = String(formdata.get("folder"));
   const time = String(formdata.get("time"));
   const watermark = String(formdata.get("watermark"));
-  const folderPath = path.join(process.cwd(), "public/images", folder);
+  const folderPath = path.join(process.cwd(), "images", folder);
   const thumbnailPath = path.join(folderPath, "thumbs");
 
   // 确保保存路径存在
