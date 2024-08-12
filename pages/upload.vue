@@ -1,6 +1,6 @@
 <template>
   <div class="main-page">
-    <div style="width: 100%; padding: 0.5rem;">
+    <div style="width: 100%; padding: 0.5rem">
       <v-row>
         <v-col cols="12" sm="6">
           <v-text-field
@@ -49,14 +49,18 @@
         </v-col>
         <v-col cols="2" sm="1">
           <div class="text-center">
-            <v-btn
-              :aria-label="$t('upload.add-folder')"
-              variant="outlined"
-              @click="showAddFolder"
-              color="rgba(246, 70, 124)"
-              icon="mdi-plus"
-            >
-            </v-btn>
+            <v-tooltip :text="$t('upload.add-folder')">
+              <template v-slot:activator="{ props }">
+                <v-btn
+                  v-bind="props"
+                  variant="outlined"
+                  @click="showAddFolder"
+                  color="rgba(246, 70, 124)"
+                  icon="mdi-plus"
+                >
+                </v-btn>
+              </template>
+            </v-tooltip>
           </div>
         </v-col>
         <v-col cols="8" sm="4">
@@ -68,7 +72,7 @@
             accept="image/png, image/jpeg, image/bmp"
             multiple
             counter
-            prepend-icon="mdi-minus"
+            prepend-icon=""
             :show-size="1000"
           >
             <template v-slot:prepend>
@@ -99,7 +103,11 @@
             </template>
           </v-file-input>
         </v-col>
-        <v-col cols="4" sm="2">
+        <v-col
+          cols="4"
+          sm="2"
+          style="display: flex; justify-content: center; align-items: center; margin-top: -1rem;"
+        >
           <div class="text-center">
             <v-btn
               variant="outlined"
@@ -139,7 +147,10 @@
           <span class="text-h5">{{ $t("upload.add-folder") }}</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field label="New Folder" v-model="newFolder"></v-text-field>
+          <v-text-field
+            :label="$t('upload.folder-name')"
+            v-model="newFolder"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -148,7 +159,7 @@
             @click="showAddFolderDialog = false"
             variant="elevated"
           >
-            Cancel
+            {{ $t("common.cancel") }}
           </v-btn>
           &nbsp;
           <v-btn
@@ -157,7 +168,7 @@
             color="rgba(246, 70, 124, 0.5)"
             variant="elevated"
           >
-            Add
+            {{ $t("common.add") }}
           </v-btn>
           <v-spacer></v-spacer>
         </v-card-actions>
@@ -170,7 +181,6 @@
         :src="fullscreenImage"
         alt="Fullscreen Image"
         class="fullscreen-image"
-        id="fullscreen-image"
       />
       <span class="close-button" @click="closeFullscreen">&times;</span>
     </div>
@@ -233,6 +243,7 @@ const uploadImages = () => {
 
   if (!folder.value || selectIamges.value.length <= 0) {
     errorAlert("Please select folder and upload images");
+    uploading.value = false;
     return;
   }
   const formdata = new FormData();

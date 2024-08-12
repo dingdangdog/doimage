@@ -14,15 +14,35 @@
 
     <v-app-bar :elevation="2">
       <template v-slot:prepend>
-        <v-img
-          :width="40"
-          aspect-ratio="1/1"
-          cover
-          src="/Doimage.png"
-        ></v-img>
+        <v-img :width="40" aspect-ratio="1/1" cover src="/Doimage.png"></v-img>
         <span class="title">{{ $t("title") }}</span>
       </template>
       <template v-slot:append>
+        <v-tooltip text="Change to English" v-if="locale == 'zh'">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind="props"
+              color="rgb(246, 70, 124)"
+              icon="mdi-alpha-e-box-outline"
+              size="large"
+              @click="changeLang"
+              class="exit-icon"
+            ></v-icon>
+          </template>
+        </v-tooltip>
+
+        <v-tooltip text="切换中文" v-if="locale != 'zh'">
+          <template v-slot:activator="{ props }">
+            <v-icon
+              v-bind="props"
+              color="rgb(246, 70, 124)"
+              icon="mdi-translate"
+              size="large"
+              @click="changeLang"
+              class="exit-icon"
+            ></v-icon>
+          </template>
+        </v-tooltip>
         <v-icon
           color="#f6467c"
           icon="mdi-exit-to-app"
@@ -54,6 +74,9 @@
 
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+const { locale, locales, setLocale } = useI18n();
+console.log(locale.value);
+const switchLocalePath = useSwitchLocalePath();
 
 const route = useRoute();
 const tab = ref(route.path == "/" ? "login" : route.path.replace("/", ""));
@@ -70,7 +93,11 @@ const toPage = (path: string) => {
 const logout = () => {
   warningAlert("Logout");
   window.localStorage.removeItem("key");
-  navigateTo("/");
+  navigateTo(`/`);
+};
+
+const changeLang = () => {
+  setLocale(locale.value == "zh" ? "en" : "zh");
 };
 </script>
 
@@ -82,6 +109,7 @@ const logout = () => {
 }
 
 .exit-icon {
+  margin: 0.5rem;
   cursor: pointer;
 }
 .exit-icon:hover {

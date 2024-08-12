@@ -5,7 +5,7 @@
         <v-text-field
           bg-color="rgba(242, 197, 211, 0.5)"
           clearable
-          label="Key"
+          :label="$t('login.key')"
           v-model="serverKey"
           @keyup.enter="login"
         >
@@ -17,7 +17,7 @@
 
       <div class="text-center">
         <v-btn variant="outlined" @click="login" color="rgba(246, 70, 124)">
-          {{ $t("menu.login") }}
+          {{ $t("login.login") }}
         </v-btn>
       </div>
     </div>

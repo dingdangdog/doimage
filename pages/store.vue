@@ -18,14 +18,20 @@
           @update:model-value="changeFolder"
         ></v-select>
       </div>
-      <v-btn
-        variant="outlined"
-        :aria-label="$t('store.search')"
-        icon="mdi-refresh"
-        color="rgba(246, 70, 124)"
-        style="margin: 0.5rem; margin-top: -1rem"
-        @click="refresh"
-      ></v-btn>
+
+      <v-tooltip :text="$t('store.refresh')">
+        <template v-slot:activator="{ props }">
+          <v-btn
+            v-bind="props"
+            variant="outlined"
+            icon="mdi-refresh"
+            color="rgba(246, 70, 124)"
+            style="margin: 0.5rem; margin-top: -1rem"
+            @click="refresh"
+          >
+          </v-btn>
+        </template>
+      </v-tooltip>
     </div>
 
     <div class="images-container">
@@ -42,20 +48,26 @@
     </div>
     <div style="width: 100%">
       <v-row style="width: 100%; margin-top: 0.5rem">
-        <v-col cols="3" sm="4">
-          <div style="text-align: right">Total:{{ total }}</div>
+        <v-col
+          cols="3"
+          sm="4"
+          style="display: flex; justify-content: center; align-items: center"
+        >
+          <div style="text-align: right">
+            {{ $t("page.total") }}:{{ total }}
+          </div>
         </v-col>
-        <v-col cols="4" sm="2">
+        <v-col cols="4" sm="2" style="padding: 0 0.5rem !important">
           <v-text-field
             bg-color="rgba(242, 197, 211, 0.5)"
-            label="Page Size"
+            :label="$t('page.size')"
             v-model="page.size"
           ></v-text-field>
         </v-col>
-        <v-col cols="4" sm="2">
+        <v-col cols="4" sm="2" style="padding: 0 0.5rem !important">
           <v-text-field
             bg-color="rgba(242, 197, 211, 0.5)"
-            label="Page"
+            :label="$t('page.num')"
             v-model="page.page"
           ></v-text-field>
         </v-col>
@@ -88,7 +100,6 @@
       :src="fullscreenImage"
       alt="Fullscreen Image"
       class="fullscreen-image"
-      id="fullscreen-image"
     />
     <span class="close-button" @click="closeFullscreen">&times;</span>
   </div>

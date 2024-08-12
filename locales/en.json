@@ -5,26 +5,36 @@
     "upload": "Upload",
     "store": "Store"
   },
-  "login": "Login",
+  "login": {
+    "login": "Login",
+    "key": "Key"
+  },
   "upload": {
     "select-folder": "Select Store Folder",
-    "add-folder": "Add Folder",
     "select-image": "Select Images",
     "watermark": "WaterMark Info",
     "setmark": "Set Mark",
     "unsetmark": "UnSet Mark",
     "upload": "Upload",
     "file": "File",
-    "upload-result":"Upload result display area"
+    "upload-result": "Upload result display area",
+    "add-folder": "Add Folder",
+    "folder-name": "Folder Name"
   },
   "store": {
     "select-folder": "Select Store Folder",
-    "search": "Roload",
-    "images-container": "Picture display area",
-    "image": "Image",
-    "file": "File",
-    "watermark": "WaterMark Info",
-    "set": "Set Mark",
-    "unset": "UnSet Mark"
+    "refresh": "Refresh",
+    "images-container": "Picture display area, please click the refresh button for the first entry."
+  },
+  "common": {
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "add": "Add",
+    "submit": "Submit"
+  },
+  "page": {
+    "total": "Total",
+    "size": "Page Size",
+    "num": "Page Num"
   }
 }
