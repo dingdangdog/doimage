@@ -1,75 +1,46 @@
-# Nuxt 3 Minimal Starter
+# Doimage
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+[English]  [[简体中文](./README_ZH.md)]
 
-## Setup
+Doimage can build a personal image storage service and provide a simple visual operation page to facilitate the management of your images.
 
-Make sure to install the dependencies:
+## Features
 
-```bash
-# npm
-npm install
+- No Database
+- Batch upload
+- Can add watermark
+- Automatically generate thumbnails
+- Multiple folder management
+- One-click deletion
+- Automatically generate URLs
+- Chinese and English support
+- Docker deployment
+- Multi-terminal adaptation
+- Nuxt3 + Vuetify
+- Pink Storm
+- ...
 
-# pnpm
-pnpm install
+## Get Started
 
-# yarn
-yarn install
+Use This `docker-compose.yml` Quick Start:
 
-# bun
-bun install
+```yml
+services:
+  doimage:
+    image: dingdangdog/doimage:latest
+    container_name: doimage
+    #restart: always
+    environment:
+      # please change NUXT_API_SECRET value
+      - NUXT_API_SECRET=123456
+      # please change NUXT_DOMAIN value
+      - NUXT_DOMAIN=http://localhost:11080
+    volumes:
+      - ./images:/app/images
+    ports:
+      - 80:3000
 ```
 
-## Development Server
+## Screenshots
 
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+[SCREENSHOTS.MD](./doc/SCREENSHOTS.md)
