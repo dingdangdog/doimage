@@ -247,7 +247,6 @@ const getImages = () => {
 }
 
 .page-actions {
-  margin-left: -1rem;
   display: flex;
   flex-direction: column;
 }
