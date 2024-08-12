@@ -75,8 +75,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
 const { locale, locales, setLocale } = useI18n();
-console.log(locale.value);
-const switchLocalePath = useSwitchLocalePath();
 
 const route = useRoute();
 const tab = ref(route.path == "/" ? "login" : route.path.replace("/", ""));
