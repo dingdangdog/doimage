@@ -42,7 +42,7 @@ export default defineEventHandler(async (event) => {
           {
             input: Buffer.from(
               `<svg width="${width}" height="${height}">
-              <text x="50%" y="50%" font-size="40" fill="rgba(128, 128, 128, 0.8)"
+              <text x="50%" y="50%" font-size="40" font-family="Arial" fill="rgba(128, 128, 128, 0.8)"
                 dominant-baseline="middle" text-anchor="middle">
                 ${watermark}
               </text>
