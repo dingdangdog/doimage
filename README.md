@@ -2,6 +2,8 @@
 
 [English]  [[简体中文](./README_ZH.md)]
 
+![logo](./public/Doimage.png)
+
 Doimage can build a personal image storage service and provide a simple visual operation page to facilitate the management of your images.
 
 ## Features

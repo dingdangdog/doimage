@@ -2,6 +2,8 @@
 
 [[English](./README.md)]  [简体中文]
 
+![logo](./public/Doimage.png)
+
 Doimage可以构建个人图片存储服务，提供简单的可视化操作页面，方便管理您的图片。
 
 ## 功能点
