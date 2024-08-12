@@ -1,7 +1,7 @@
 /* vuetify默认样式修改 */
 .v-main {
   height: 100vh !important;
-  max-width: 99% !important;
+  /* max-width: 99% !important; */
 }
 
 .v-application__wrap {
@@ -9,8 +9,8 @@
 }
 
 .main-page {
-  max-height: 98%;
-  min-height: 80%;
+  height: 98%;
+  /* min-height: 80%; */
   margin: 0.5rem;
   padding: 0.5rem;
   display: flex;

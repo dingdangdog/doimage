@@ -7,12 +7,23 @@
   },
   "index": {
     "select-folder": "选择存储文件夹",
+    "add-folder": "新增文件夹",
     "select-image": "选择图片",
     "watermark":"水印内容",
-    "set": "设置水印",
-    "unset": "不设置水印",
+    "setmark": "设置水印",
+    "unsetmark": "不设置水印",
     "upload": "上传",
-    "file": "文件"
+    "file": "文件",
+    "upload-result":"上传结果显示区"
   },
-  "hello": "欢迎"
+  "store": {
+    "select-folder": "选择存储文件夹",
+    "search": "刷新",
+    "images-container": "图片展示区",
+    "image": "Image",
+    "file": "File",
+    "watermark": "WaterMark Info",
+    "set": "Set Mark",
+    "unset": "UnSet Mark"
+  }
 }

@@ -11,76 +11,68 @@
       <div style="max-width: 30rem; min-width: 20rem">
         <v-select
           chips
-          :label="$t('index.select-folder')"
+          :label="$t('store.select-folder')"
           :items="folders"
           v-model="folder"
           @update:model-value="changeFolder"
         ></v-select>
       </div>
-      <v-icon
+      <v-btn
+        :aria-label="$t('store.search')"
         icon="mdi-refresh"
+        color="primary"
         style="margin: 0.5rem; margin-top: -1rem"
         @click="refresh"
-      ></v-icon>
+      ></v-btn>
     </div>
 
     <div class="images-container">
-      <div
-        class="image-div"
-        v-for="image in iamges"
-      >
-        <v-img
-          :src="image"
-          aspect-ratio="1"
-          class="image bg-grey-lighten-2"
-          @click="openFullscreen(image)"
-          @contextmenu.prevent="showMenu(image)"
-        >
-          <template v-slot:placeholder>
-            <v-row class="fill-height ma-0" justify="center" align="center">
-              <v-progress-circular
-                color="grey-lighten-5"
-                indeterminate
-              ></v-progress-circular>
-            </v-row>
-          </template>
-        </v-img>
+      <div v-if="images.length <= 0">
+        {{ $t("store.images-container") }}
       </div>
+      <ImageCard
+        v-for="image in images"
+        :key="image"
+        :image="image"
+        @click="openFullscreen(image)"
+        @contextmenu.prevent="showMenu(image)"
+      />
     </div>
-
-    <v-row style="width: 100%; margin-top: 0.5rem">
-      <v-col cols="3" sm="5">
-        <div style="text-align: right">Total:{{ total }}</div>
-      </v-col>
-      <v-col cols="4" sm="1">
-        <v-text-field label="Page Size" v-model="page.size"></v-text-field>
-      </v-col>
-      <v-col cols="4" sm="1">
-        <v-text-field label="Page" v-model="page.page"></v-text-field>
-      </v-col>
-      <v-col cols="1" sm="1">
-        <div class="page-actions">
-          <v-icon
-            icon="mdi-menu-up"
-            class="page-action-icon"
-            @click="pageDown"
-          ></v-icon>
-          <v-icon
-            icon="mdi-menu-down"
-            class="page-action-icon"
-            @click="pageUp"
-          ></v-icon>
-        </div>
-      </v-col>
-      <!-- <v-col cols="2" sm="2">
+    <div style="width: 100%">
+      <v-row style="width: 100%; margin-top: 0.5rem">
+        <v-col cols="3" sm="4">
+          <div style="text-align: right">Total:{{ total }}</div>
+        </v-col>
+        <v-col cols="4" sm="2">
+          <v-text-field label="Page Size" v-model="page.size"></v-text-field>
+        </v-col>
+        <v-col cols="4" sm="2">
+          <v-text-field label="Page" v-model="page.page"></v-text-field>
+        </v-col>
+        <v-col cols="1" sm="1">
+          <div class="page-actions">
+            <v-icon
+              icon="mdi-menu-up"
+              class="page-action-icon"
+              @click="pageDown"
+            ></v-icon>
+            <v-icon
+              icon="mdi-menu-down"
+              class="page-action-icon"
+              @click="pageUp"
+            ></v-icon>
+          </div>
+        </v-col>
+        <!-- <v-col cols="2" sm="2">
         总页数：{{ Math.ceil(total / page.size) }}
       </v-col> -->
-    </v-row>
+      </v-row>
+    </div>
   </div>
 
   <!-- 图片蒙版 -->
   <div class="overlay" v-if="fullscrenn">
-    <img
+    <v-img
       :src="fullscreenImage"
       alt="Fullscreen Image"
       class="fullscreen-image"
@@ -93,7 +85,7 @@
 <script setup lang="ts">
 const folders = ref<any[]>([]);
 const folder = ref();
-const iamges = ref<any[]>([]);
+const images = ref<any[]>([]);
 
 const total = ref(0);
 const page = ref({
@@ -153,7 +145,7 @@ const handleKeydown = (event: KeyboardEvent) => {
 
 const showMenu = (image: string) => {
   // window.preventDefault();
-  
+
   console.log(image);
 };
 onMounted(() => {
@@ -180,7 +172,7 @@ const getImages = () => {
   })
     .then((res) => {
       successAlert("Success");
-      iamges.value = Array.isArray(res) ? res : [];
+      images.value = Array.isArray(res) ? res : [];
     })
     .catch(() => {
       errorAlert("Api Error");
@@ -194,6 +186,7 @@ const getImages = () => {
 }
 
 .images-container {
+  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -243,6 +236,7 @@ const getImages = () => {
   background-color: rgba(0, 0, 0, 0.8);
   text-align: center;
 }
+
 .fullscreen-image {
   max-width: 100%;
   max-height: 100%;

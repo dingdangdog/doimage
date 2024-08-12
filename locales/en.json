@@ -6,14 +6,25 @@
     "store": "Store"
   },
   "login": "Login",
-  "index": {
+  "upload": {
     "select-folder": "Select Store Folder",
+    "add-folder": "Add Folder",
     "select-image": "Select Images",
     "watermark": "WaterMark Info",
-    "set": "Set Mark",
-    "unset": "UnSet Mark",
-    "upload": "Update",
-    "file": "File"
+    "setmark": "Set Mark",
+    "unsetmark": "UnSet Mark",
+    "upload": "Upload",
+    "file": "File",
+    "upload-result":"Upload result display area"
   },
-  "hello": "Welcome"
+  "store": {
+    "select-folder": "Select Store Folder",
+    "search": "Roload",
+    "images-container": "Picture display area",
+    "image": "Image",
+    "file": "File",
+    "watermark": "WaterMark Info",
+    "set": "Set Mark",
+    "unset": "UnSet Mark"
+  }
 }

@@ -7,6 +7,7 @@
           clearable
           label="Key"
           v-model="serverKey"
+          @keyup.enter="login"
         ></v-text-field>
       </div>
 
