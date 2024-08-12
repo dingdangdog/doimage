@@ -1,0 +1,14 @@
+services:
+  doimage:
+    image: dingdangdog/doimage:1.0.0
+    container_name: doimage
+    #restart: always
+    environment:
+      # please change NUXT_API_SECRET value
+      - NUXT_API_SECRET=123456
+      # please change NUXT_DOMAIN value
+      - NUXT_DOMAIN=http://localhost:11080
+    volumes:
+      - ./images:/app/images
+    ports:
+      - 11080:3000

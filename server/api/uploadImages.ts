@@ -36,17 +36,29 @@ export default defineEventHandler(async (event) => {
     const metadata = await image.metadata();
     const width = metadata.width || 250;
     const height = metadata.height || 200;
+    const fontFamily = "SmileySans"; // 自定义字体名称
+    const fontPath = path.join(
+      process.cwd(),
+      "public",
+      "SmileySans-Oblique.otf"
+    );
     if (watermark && watermark != "null") {
       try {
         image = image.composite([
           {
             input: Buffer.from(
               `<svg width="${width}" height="${height}">
-              <text x="50%" y="50%" font-size="40" font-family="Arial" fill="rgba(128, 128, 128, 0.8)"
-                dominant-baseline="middle" text-anchor="middle">
-                ${watermark}
-              </text>
-            </svg>`
+                <style>
+                  @font-face {
+                    font-family: '${fontFamily}';
+                    src: url('file://${fontPath}') format('opentype');
+                  }
+                </style>
+                <text x="50%" y="50%" font-size="40" font-family="${fontFamily}" fill="rgba(128, 128, 128, 0.8)"
+                  dominant-baseline="middle" text-anchor="middle">
+                  ${watermark}
+                </text>
+              </svg>`
             ),
             gravity: "center",
           },
