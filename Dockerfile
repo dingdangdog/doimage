@@ -9,7 +9,7 @@ FROM node:alpine3.20 AS RUNNER
 LABEL author.name="DingDangDog"
 LABEL author.email="dingdangdogx@outlook.com"
 LABEL project.name="Doimage"
-LABEL project.version="1.0.0"
+LABEL project.version="1.0.1"
 
 WORKDIR /app
 # 安装字体配置工具
