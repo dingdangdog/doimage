@@ -33,4 +33,19 @@ const { image } = defineProps(["image"]);
   border-radius: 0.2rem;
   cursor: pointer;
 }
+
+@media screen and (max-width: 1080px) {
+  .image-div {
+    width: 8rem;
+    height: 7rem;
+  }
+}
+
+
+@media screen and (max-width: 720px) {
+  .image-div {
+    width: 7rem;
+    height: 7rem;
+  }
+}
 </style>

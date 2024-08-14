@@ -369,20 +369,6 @@ onMounted(() => {
   border-radius: 5px;
 }
 
-.image-div {
-  margin: 0.5rem;
-  width: 10rem;
-  height: 8rem;
-  border: 1px solid #f6467c;
-  border-radius: 0.2rem;
-}
-
-.image {
-  padding: 0.5rem;
-  border-radius: 0.2rem;
-  cursor: pointer;
-}
-
 /* 在这里添加样式来隐藏 overlay 和 fullscreen-image */
 .overlay {
   position: absolute;
