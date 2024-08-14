@@ -12,7 +12,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar :elevation="2">
+    <v-app-bar color="rgba(242, 197, 211, 0.5)" :elevation="2">
       <template v-slot:prepend>
         <v-img :width="40" aspect-ratio="1/1" cover src="/Doimage.png"></v-img>
         <span class="title">{{ $t("title") }}</span>
