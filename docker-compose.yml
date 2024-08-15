@@ -1,6 +1,6 @@
 services:
   doimage:
-    image: dingdangdog/doimage:1.0.0
+    image: dingdangdog/doimage:latest
     container_name: doimage
     #restart: always
     environment:
