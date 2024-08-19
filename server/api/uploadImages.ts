@@ -30,12 +30,18 @@ export default defineEventHandler(async (event) => {
     // 读取文件数据
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
+    const allowExt = [
+      ".jpeg",
+      ".jpg",
+      ".jfif",
+      ".png",
+      ".webp",
+      ".tiff",
+      ".gif",
+      ".avif",
+    ];
     // 处理支持的格式
-    if (
-      [".jpeg", ".jpg", ".png", ".webp", ".tiff", ".gif", ".avif"].includes(
-        extension
-      )
-    ) {
+    if (allowExt.includes(extension)) {
       // 处理图像
       let image = sharp(fileBuffer);
 
