@@ -37,7 +37,6 @@ export default defineEventHandler(async (event) => {
       ".png",
       ".webp",
       ".tiff",
-      ".gif",
       ".avif",
     ];
     // 处理支持的格式
