@@ -69,7 +69,7 @@
             :rules="rules"
             :label="$t('upload.select-image')"
             v-model="selectIamges"
-            accept="image/png, image/jpeg, image/bmp"
+            accept="image/png, image/jpeg, image/bmp, image/webp, image/gif, image/avif, image/apng, image/svg+xml, image/tiff, image/x-icon, image/vnd.microsoft.icon"
             multiple
             counter
             prepend-icon=""
@@ -319,6 +319,7 @@ const menuPosition = ref({ x: 0, y: 0 });
 const showMenu = (image: string) => {
   // window.preventDefault();
   selectImage.value = image;
+  // @ts-ignore
   menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
   if (window.innerWidth > 1280) {
     menuPosition.value.x -= 256;
