@@ -27,7 +27,7 @@ const getFileList = (dir: string): string[] => {
 
   try {
     const files = fs.readdirSync(folderPath);
-
+    files.sort((a, b) => b.localeCompare(a));
     for (const file of files) {
       const filePath = path.join(folderPath, file);
       if (fs.statSync(filePath).isFile()) {
