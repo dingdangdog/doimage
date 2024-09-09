@@ -5,7 +5,7 @@ import { Readable } from "stream";
 
 export default defineEventHandler(async (event) => {
   // 获取文件路径参数
-  const file = getRouterParam(event, "file");
+  const file = decodeURIComponent(getRouterParam(event, "file") || "");
   const query = getQuery(event);
 
   // 获取指定的宽度和高度参数
