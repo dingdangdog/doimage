@@ -24,6 +24,7 @@
   "store": {
     "select-folder": "Select Store Folder",
     "refresh": "Refresh",
+    "jumpPage": "Page Jump",
     "images-container": "Picture display area, please click the refresh button for the first entry."
   },
   "common": {
