@@ -40,7 +40,7 @@ export const check = () => {
     });
 };
 
-export const doApi = async (api: string, body: {}) => {
+export const doApi = async (api: string, body: any) => {
   const key = window.localStorage.getItem("key");
   const time = String(Date.now());
   return $fetch(api, {
@@ -91,6 +91,5 @@ export const warningAlert = (message: string) => {
   alert("warning", message);
 };
 
-
-export const showDeleteDialog = ref(false)
-export const deleteImage = ref("")
+export const showDeleteDialog = ref(false);
+export const deleteImage = ref("");

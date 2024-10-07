@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     // The private keys which are only available server-side
     apiSecret: "",
-    domain:"",
+    domain: "",
     // Keys within public are also exposed client-side
     public: {
       apiBase: "/api",
@@ -63,6 +63,10 @@ export default defineNuxtConfig({
       cookieKey: "i18n_redirected",
       redirectOn: "root", // recommended
     },
+  },
+  experimental: {
+    // API允许跨域
+    crossOriginPrefetch: true,
   },
   vite: {
     vue: {
