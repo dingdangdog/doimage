@@ -27,7 +27,7 @@ export default defineEventHandler(async (event) => {
           ".tiff",
           ".avif",
         ];
-        console.log(path.extname(basePath));
+        // console.log(path.extname(basePath));
         if (!supportedFormats.includes(path.extname(basePath))) {
           // 如果格式不支持，直接返回原图
           return sendStream(event, fs.createReadStream(basePath));
@@ -35,7 +35,7 @@ export default defineEventHandler(async (event) => {
 
         let image = sharp(basePath);
         const metadata = await image.metadata();
-        console.log(metadata.width, metadata.height);
+        // console.log(metadata.width, metadata.height);
         // 判断是否需要调整图片尺寸
         if (
           requestedWidth &&
@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
           // @ts-ignore
           (requestedWidth < metadata.width || requestedHeight < metadata.height)
         ) {
-          console.log(requestedWidth, requestedWidth);
+          // console.log(requestedWidth, requestedWidth);
           image = image.resize({
             width: Math.min(requestedWidth, metadata.width!),
             height: Math.min(requestedHeight, metadata.height!),
