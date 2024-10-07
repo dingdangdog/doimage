@@ -3,6 +3,7 @@
     <div class="menu" @click="copyThumbUrl">复制缩略图URL</div>
     <div class="menu" @click="copyUrl">复制原图URL</div>
     <div class="menu" @click="copyMarkdownl">复制Markdown</div>
+    <div class="menu" @click="toDownload">下载</div>
     <div class="menu" @click="toDelete">删除</div>
   </div>
 </template>
@@ -27,6 +28,21 @@ const copyMarkdownl = () => {
   const realUrl = image.replace("/thumbs/", "/");
   navigator.clipboard.writeText(`![image](${realUrl})`);
   successAlert("Copy Success");
+};
+
+const toDownload = () => {
+  console.log("toDownload");
+  const fileUrl = `/download?url=${image}`;
+
+  // 创建一个隐藏的 <a> 标签
+  const link = document.createElement("a");
+  link.href = fileUrl;
+  document.body.appendChild(link);
+  link.click();
+  successAlert("Downloading started");
+
+  // 移除 <a> 标签
+  document.body.removeChild(link);
 };
 
 const toDelete = () => {
