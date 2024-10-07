@@ -47,52 +47,80 @@
       />
     </div>
     <div style="width: 100%">
-      <v-row style="width: 100%; margin-top: 0.5rem">
-        <v-col
-          cols="3"
-          sm="4"
-          style="display: flex; justify-content: center; align-items: center"
-        >
-          <div style="text-align: right">
-            {{ $t("page.total") }}:{{ total }}
-          </div>
-        </v-col>
-        <v-col cols="4" sm="2" style="padding: 0 0.5rem !important">
-          <v-text-field
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-wrap: wrap;
+          padding-top: 1rem;
+        "
+      >
+        <div style="text-align: right">{{ $t("page.total") }}:{{ total }}</div>
+        <div style="min-width: 3rem; text-align: center; margin: 0 0.5rem">
+          {{ $t("page.size") }}:{{ pageParam.size }}
+          <!-- <v-autocomplete
             bg-color="rgba(242, 197, 211, 0.5)"
             :label="$t('page.size')"
+            variant="underlined"
+            hide-details="auto"
             v-model="page.size"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="4" sm="2" style="padding: 0 0.5rem !important">
-          <v-text-field
-            bg-color="rgba(242, 197, 211, 0.5)"
-            :label="$t('page.num')"
-            v-model="page.page"
-          ></v-text-field>
-        </v-col>
-        <v-col cols="1" sm="1">
-          <div class="page-actions">
-            <v-icon
-              color="rgba(246, 70, 124)"
-              icon="mdi-menu-up"
-              class="page-action-icon"
-              @click="pageDown"
-            ></v-icon>
-            <v-icon
-              color="rgba(246, 70, 124)"
-              icon="mdi-menu-down"
-              class="page-action-icon"
-              @click="pageUp"
-            ></v-icon>
+            :items="[20, 40, 60, 80, 100]"
+          ></v-autocomplete> -->
+        </div>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            margin: 0 0.5rem;
+          "
+        >
+          <v-icon
+            color="rgba(246, 70, 124)"
+            icon="mdi-chevron-left-circle-outline"
+            class="page-action-icon"
+            @click="pageDown"
+          ></v-icon>
+          <div style="min-width: 3rem; text-align: center">
+            {{ $t("page.num") }}:{{ pageParam.page }}
+            <!-- <v-text-field
+              hide-details="auto"
+              variant="underlined"
+              :label="$t('page.num')"
+              v-model="page.page"
+            ></v-text-field> -->
           </div>
-        </v-col>
-        <!-- <v-col cols="2" sm="2">
-        总页数：{{ Math.ceil(total / page.size) }}
-      </v-col> -->
-      </v-row>
+          <v-icon
+            color="rgba(246, 70, 124)"
+            icon="mdi-chevron-right-circle-outline"
+            class="page-action-icon"
+            @click="pageUp"
+          ></v-icon>
+        </div>
+        <span @click="jumpPageDialog = true" style="cursor: pointer">跳页</span>
+      </div>
     </div>
   </div>
+  <v-dialog v-model="jumpPageDialog" style="max-width: 30rem">
+    <v-card color="rgba(255, 208, 223, 0.5)">
+      <v-card-title>
+        <span class="text-h5">{{ $t("store.jump-page") }}</span>
+      </v-card-title>
+      <v-card-text>
+        <v-text-field
+          hide-details="auto"
+          variant="underlined"
+          :label="$t('page.num')"
+          v-model="jumpPage"
+        ></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="jumpPageDialog = false">{{ $t("common.cancel") }}</v-btn>
+        <v-btn @click="toJumpPage">{{ $t("common.confirm") }}</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 
   <!-- 图片蒙版 -->
   <div class="overlay" v-if="fullscrenn">
@@ -116,12 +144,23 @@
 <script setup lang="ts">
 import { showDeleteDialog } from "../utils";
 
+const jumpPageDialog = ref(false);
+const jumpPage = ref(1);
+const toJumpPage = () => {
+  if (jumpPage.value > Math.ceil(total.value / pageParam.value.size)) {
+    warningAlert("Invalid Page Number");
+  } else {
+    pageParam.value.page = jumpPage.value;
+    jumpPageDialog.value = false;
+  }
+};
+
 const folders = ref<any[]>([]);
 const folder = ref();
 const images = ref<any[]>([]);
 
 const total = ref(0);
-const page = ref({
+const pageParam = ref({
   page: 1,
   size: 40,
 });
@@ -147,13 +186,17 @@ const refresh = () => {
 };
 
 const pageUp = () => {
-  if (page.value.page < Math.ceil(total.value / page.value.size)) {
-    page.value.page++;
+  if (pageParam.value.page < Math.ceil(total.value / pageParam.value.size)) {
+    pageParam.value.page++;
+  } else {
+    warningAlert("No more page");
   }
 };
 const pageDown = () => {
-  if (page.value.page > 1) {
-    page.value.page--;
+  if (pageParam.value.page > 1) {
+    pageParam.value.page--;
+  } else {
+    warningAlert("No pre page");
   }
 };
 
@@ -181,6 +224,7 @@ const menuPosition = ref({ x: 0, y: 0 });
 const showMenu = (image: string) => {
   // window.preventDefault();
   selectImage.value = image;
+  // @ts-ignore
   menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
   if (window.innerWidth > 1280) {
     menuPosition.value.x -= 256;
@@ -192,6 +236,8 @@ onMounted(() => {
   doApi("/api/getFolders", {})
     .then((res) => {
       folders.value = Array.isArray(res) ? res : [];
+
+      changeFolder();
     })
     .catch((err) => {
       errorAlert("Api Error");
@@ -203,18 +249,18 @@ onMounted(() => {
   });
 });
 
-watch(page.value, () => {
+watch(pageParam.value, () => {
   getImages();
 });
 
 const getImages = () => {
   doApi("/api/getImages", {
     folder: folder.value,
-    start: (page.value.page - 1) * page.value.size,
-    num: page.value.size,
+    start: (pageParam.value.page - 1) * pageParam.value.size,
+    num: pageParam.value.size,
   })
     .then((res) => {
-      successAlert("Success");
+      // successAlert("Success");
       images.value = Array.isArray(res) ? res : [];
     })
     .catch(() => {
@@ -243,14 +289,8 @@ const getImages = () => {
   border-radius: 5px;
 }
 
-.page-actions {
-  display: flex;
-  flex-direction: column;
-}
-
 .page-action-icon {
   cursor: pointer;
-  border: 1px solid #f6467c;
   margin: 0.2rem;
 }
 
