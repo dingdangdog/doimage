@@ -25,8 +25,9 @@ export default defineEventHandler(async (event) => {
 
     // 获取文件扩展名
     const extension = path.extname(file.name);
+
     // 生成唯一文件名
-    const filename = `${folder}-${time}-${i}${extension}`;
+    const filename = `${time}-${i + 1}-${extension}`;
     // 读取文件数据
     const fileBuffer = Buffer.from(await file.arrayBuffer());
 
