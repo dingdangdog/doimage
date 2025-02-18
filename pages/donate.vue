@@ -1,7 +1,7 @@
 <template>
   <div class="max-w-4xl mx-auto h-full">
     <iframe
-      :src="`https://oldmoon.top${locale ? '/' + locale : ''}/idonate`"
+      :src="`https://oldmoon.top${locale == 'en' ? '' : '/' + locale}/idonate`"
       class="w-full h-full"
     ></iframe>
   </div>
