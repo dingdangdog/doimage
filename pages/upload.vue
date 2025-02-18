@@ -27,22 +27,16 @@ const resIamges = ref<any[]>([]);
 const selectIamges = ref<File[]>([]);
 const uploading = ref(false);
 const showAddFolderDialog = ref(false);
-const newFolder = ref("");
-const addFolder = () => {
-  doApi("/api/addFolder", { folder: newFolder.value })
-    .then(() => {
-      showAddFolderDialog.value = false;
-      folder.value = newFolder.value;
-      newFolder.value = "";
-      getFolders();
-    })
-    .catch((err) => {
-      errorAlert("Api Error");
-    });
-};
 
 const showAddFolder = () => {
   showAddFolderDialog.value = true;
+};
+const addFolder = () => {
+  showAddFolderDialog.value = false;
+  getFolders();
+};
+const closeAddFolderDialog = () => {
+  showAddFolderDialog.value = false;
 };
 
 const handleFileChange = (event: Event) => {
@@ -152,120 +146,156 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="main-page">
-    <div class="w-full p-2">
-      <div class="flex flex-col sm:flex-row">
-        <div class="w-full sm:w-1/2 px-2">
-          <div class="relative">
-            <input
-              type="text"
-              class="bg-[rgba(242, 197, 211, 0.5)] shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              :placeholder="$t('upload.watermark')"
-              v-model="watermark"
-            />
-            <div
-              class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center"
+  <div class="bg-gray-50 h-full flex flex-col">
+    <!-- Header Section -->
+    <div class="max-w-5xl w-full mx-auto sm:px-6 lg:px-8 py-6 flex-grow">
+      <div class="bg-white shadow-lg rounded-lg mb-8">
+        <div class="p-6 border-b border-gray-200 bg-gray-100">
+          <h3 class="text-xl font-semibold text-gray-900">
+            {{ $t("upload.settings") }}
+          </h3>
+        </div>
+
+        <!-- Watermark Settings -->
+        <div class="space-y-6 bg-white p-6 rounded-xl shadow-md">
+          <!-- Watermark Input -->
+          <div>
+            <label
+              for="watermark"
+              class="block text-sm font-semibold text-gray-800"
             >
-              <IconWatermark class="w-6 h-6" color="rgba(246, 70, 124)" />
+              水印
+            </label>
+            <div class="mt-2 relative">
+              <input
+                type="text"
+                id="watermark"
+                class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                placeholder="请输入水印文字"
+                v-model="watermark"
+              />
             </div>
           </div>
-        </div>
-        <div class="w-full sm:w-1/3 px-2 flex items-center justify-center">
-          <div class="text-center">
-            <div class="inline-flex items-center">
-              <input
-                type="radio"
-                id="setmark"
-                value="1"
-                v-model="addWatermark"
-                class="form-radio h-5 w-5 text-[rgba(246, 70, 124)] focus:ring-0"
-              />
-              <label for="setmark" class="ml-2 text-gray-700">{{
-                $t("upload.setmark")
-              }}</label>
-            </div>
-            <div class="inline-flex items-center ml-4">
-              <input
-                type="radio"
-                id="unsetmark"
-                value="2"
-                v-model="addWatermark"
-                class="form-radio h-5 w-5 text-[rgba(246, 70, 124)] focus:ring-0"
-              />
-              <label for="unsetmark" class="ml-2 text-gray-700">{{
-                $t("upload.unsetmark")
-              }}</label>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="flex flex-col sm:flex-row mt-2">
-        <div class="w-full sm:w-5/12 px-2">
-          <div class="relative">
-            <select
-              class="block appearance-none w-full bg-[rgba(242,197,211,0.5)] border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              :value="folder"
-              @change="changeFolder"
-            >
-              <option v-for="item in folders" :key="item" :value="item">
-                {{ item }}
-              </option>
-            </select>
-            <div
-              class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-            >
-              <svg
-                class="fill-current h-4 w-4"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+
+          <!-- Watermark Option -->
+          <fieldset class="p-4 border border-gray-300 rounded-lg bg-gray-50">
+            <legend class="text-sm font-semibold text-gray-800">
+              水印选项
+            </legend>
+            <div class="mt-3 flex space-x-6">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  id="setmark"
+                  name="watermark-option"
+                  type="radio"
+                  value="1"
+                  v-model="addWatermark"
+                  class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
                 />
-              </svg>
+                <span class="text-gray-700 text-sm font-medium">添加水印</span>
+              </label>
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input
+                  id="unsetmark"
+                  name="watermark-option"
+                  type="radio"
+                  value="2"
+                  v-model="addWatermark"
+                  class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                />
+                <span class="text-gray-700 text-sm font-medium"
+                  >不添加水印</span
+                >
+              </label>
             </div>
-          </div>
-        </div>
-        <div class="w-full sm:w-1/12 px-2 flex items-center justify-center">
-          <div class="text-center">
-            <div class="relative group">
-              <span
-                class="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10"
+          </fieldset>
+
+          <!-- Folder Select -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label
+                for="folderSelect"
+                class="block text-sm font-semibold text-gray-800"
               >
-                {{ $t("upload.add-folder") }}
-              </span>
+                选择文件夹
+              </label>
+              <select
+                id="folderSelect"
+                class="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+                :value="folder"
+                @change="changeFolder"
+              >
+                <option v-for="item in folders" :key="item" :value="item">
+                  {{ item }}
+                </option>
+              </select>
+            </div>
+
+            <div class="flex justify-start sm:justify-end">
               <button
-                class="border border-[rgba(246,70,124)] text-[rgba(246,70,124)] hover:bg-[rgba(246,70,124,0.1)] font-semibold rounded-full p-2 focus:outline-none focus:shadow-outline"
+                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 @click="showAddFolder"
               >
-                <IconPlus class="w-6 h-6" color="rgba(246, 70, 124)" />
+                <svg
+                  class="h-5 w-5 mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+                添加文件夹
               </button>
             </div>
           </div>
-        </div>
-        <div class="w-full sm:w-4/12 px-2">
-          <div class="relative">
+
+          <div
+            @dragover.prevent="dragOver = true"
+            @dragleave="dragOver = false"
+            @drop.prevent="handleDrop"
+            @click.stop="$refs.fileInput.click()"
+            class="mt-6 border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-50 hover:bg-indigo-100/50 hover:border-indigo-700 transition-all ease-in-out"
+            :class="{
+              'border-indigo-700 bg-blue-50': dragOver,
+              'border-gray-300': !dragOver,
+            }"
+          >
             <input
               type="file"
-              class="bg-[rgba(242, 197, 211, 0.5)] shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              :placeholder="$t('upload.select-image')"
-              @change="handleFileChange"
-              accept="image/png, image/jpeg, image/bmp, image/webp, image/gif, image/avif, image/apng, image/svg+xml, image/tiff, image/x-icon, image/vnd.microsoft.icon"
               multiple
+              accept="image/*"
+              @change="handleFileChange"
+              class="hidden"
+              ref="fileInput"
             />
             <div
-              class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center"
+              class="text-gray-500 transition-all"
+              :class="{
+                'my-0': selectIamges.length > 0,
+                'my-16': selectIamges.length === 0,
+              }"
             >
-              <IconImages class="w-6 h-6" color="rgba(246, 70, 124)" />
+              <p>
+                <!-- {{ $t("watermark.upload-tip") }} -->
+                拖拽或
+                <button
+                  type="button"
+                  @click.stop="$refs.fileInput.click()"
+                  class="text-purple-800 font-semibold hover:text-purple-700 focus:outline-none"
+                >
+                  上传图片
+                </button>
+              </p>
+              <p class="text-sm mt-2"></p>
             </div>
           </div>
-        </div>
-        <div
-          class="w-full sm:w-2/12 px-2 flex items-center justify-center mt-2 sm:mt-0"
-        >
-          <div class="text-center">
+          <div class="flex justify-center mt-4">
             <button
-              class="bg-transparent hover:bg-[rgba(246,70,124,0.7)] text-[rgba(246,70,124)] font-semibold hover:text-white py-2 px-4 border border-[rgba(246,70,124)] hover:border-transparent rounded focus:outline-none focus:shadow-outline"
+              class="inline-flex items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
               :disabled="uploading"
               @click="uploadImages"
             >
@@ -274,89 +304,71 @@ onMounted(() => {
           </div>
         </div>
       </div>
-    </div>
 
-    <div
-      class="images-container flex-grow flex flex-wrap justify-center max-h-screen w-full p-2 m-2 overflow-y-auto border border-gray-300 rounded-md"
-    >
-      <div v-if="resIamges.length <= 0" class="text-gray-500">
-        {{ $t("upload.upload-result") }}
-      </div>
-
-      <ImageCard
-        v-for="image in resIamges"
-        :key="image"
-        :image="image"
-        @click="openFullscreen(image)"
-        @contextmenu.prevent="showMenu(image, $event)"
-      />
-    </div>
-
-    <div
-      v-if="showAddFolderDialog"
-      class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center"
-    >
-      <div
-        class="fixed inset-0 bg-black opacity-50"
-        @click="showAddFolderDialog = false"
-      ></div>
-      <div
-        class="bg-white rounded-lg p-4 shadow-xl z-10 min-w-[20rem] max-w-lg bg-[rgba(255,208,223,0.5)]"
-      >
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">
-          {{ $t("upload.add-folder") }}
-        </h3>
-        <div class="mb-4">
-          <div class="relative">
-            <input
-              type="text"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              :placeholder="$t('upload.folder-name')"
-              v-model="newFolder"
-            />
+      <!-- File Upload Section -->
+      <div class="bg-white shadow-lg rounded-lg mb-8">
+        <div class="p-6 border-b border-gray-200 bg-gray-100">
+          <h3 class="text-xl font-semibold text-gray-900">
+            {{ $t("upload.upload_result_title") }}
+          </h3>
+        </div>
+        <!-- Result Display -->
+        <div class="bg-white overflow-hidden shadow-lg rounded-lg mb-8">
+          <div class="p-6">
+            <div
+              v-if="resIamges.length <= 0"
+              class="text-gray-500 py-4 text-center"
+            >
+              {{ $t("upload.upload-result") }}
+            </div>
+            <div
+              v-else
+              class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+            >
+              <ImageCard
+                v-for="image in resIamges"
+                :key="image"
+                :image="image"
+                @click="openFullscreen(image)"
+                @contextmenu.prevent="showMenu(image, $event)"
+              />
+            </div>
           </div>
         </div>
-        <div class="flex justify-end">
-          <button
-            class="bg-transparent hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded focus:outline-none focus:shadow-outline mr-2"
-            @click="showAddFolderDialog = false"
-          >
-            {{ $t("common.cancel") }}
-          </button>
-          <button
-            class="bg-[rgba(246,70,124,0.5)] hover:bg-[rgba(246,70,124,0.7)] text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            @click="addFolder"
-          >
-            {{ $t("common.add") }}
-          </button>
-        </div>
       </div>
     </div>
-
-    <div
-      class="overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 text-center z-40"
-      v-if="fullscrenn"
-    >
-      <img
-        :src="fullscreenImage"
-        alt="Fullscreen Image"
-        class="fullscreen-image max-w-full max-h-full m-auto block absolute top-0 left-0 right-0 bottom-0"
-      />
-      <span
-        class="close-button color-gray-300 text-3xl absolute top-2 right-5 cursor-pointer"
-        @click="closeFullscreen"
-        >&times;</span
-      >
-    </div>
-
-    <ImageMenu
-      v-if="showImageMenu"
-      :showMenu="showImageMenu"
-      :image="selectImage"
-      :x="menuPosition.x"
-      :y="menuPosition.y"
-    />
-    <DeleteDialog v-if="showDeleteDialog" />
   </div>
+
+  <!-- Fullscreen Image View -->
+  <div
+    class="overlay fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 text-center z-50 flex justify-center items-center"
+    v-if="fullscrenn"
+  >
+    <img
+      :src="fullscreenImage"
+      alt="Fullscreen Image"
+      class="fullscreen-image max-w-full max-h-full m-auto block rounded-lg"
+    />
+    <span
+      class="close-button text-gray-100 text-4xl absolute top-6 right-10 cursor-pointer"
+      @click="closeFullscreen"
+      >&times;</span
+    >
+  </div>
+
+  <!-- Image Menu -->
+  <ImageMenu
+    v-if="showImageMenu"
+    :showMenu="showImageMenu"
+    :image="selectImage"
+    :x="menuPosition.x"
+    :y="menuPosition.y"
+  />
+  <!-- Delete Dialog -->
+  <DeleteDialog v-if="showDeleteDialog" />
+  <AddFolderDialog
+    v-if="showAddFolderDialog"
+    :addFolder="addFolder"
+    :close-dialog="closeAddFolderDialog"
+  />
 </template>
-```
