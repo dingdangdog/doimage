@@ -12,14 +12,14 @@ export default defineEventHandler(async (event) => {
     const thumbFilePath = path.join(process.cwd(), thumbFile);
     try {
       // 删除缩略图文件
-      console.log("Delete:", thumbFilePath);
+      // console.log("Delete:", thumbFilePath);
       fs.unlinkSync(thumbFilePath);
     } catch {}
     // const Slash = thumbFilePath.concat("/thumbs/") ? "/" : "\\";
     const filePath = thumbFilePath.replace("thumbs", "");
     try {
       // 删除原图文件
-      console.log("Delete:", filePath);
+      // console.log("Delete:", filePath);
       fs.unlinkSync(filePath);
     } catch {}
   }

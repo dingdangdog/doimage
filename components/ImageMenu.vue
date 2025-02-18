@@ -29,7 +29,7 @@ const copyMarkdownl = () => {
 };
 
 const toDownload = () => {
-  console.log("toDownload");
+  // console.log("toDownload");
   const fileUrl = `/download?url=${image}`;
 
   // 创建一个隐藏的 <a> 标签
@@ -44,7 +44,7 @@ const toDownload = () => {
 };
 
 const toDelete = () => {
-  console.log("todelete");
+  // console.log("todelete");
   showDeleteDialog.value = true;
   deleteImage.value = image || "";
 };

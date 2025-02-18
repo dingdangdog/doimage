@@ -49,7 +49,7 @@ const addFolder = () => {
 };
 
 const closeDialog = () => {
-  console.log("closeDialog");
+  // console.log("closeDialog");
   emit("close-dialog");
 };
 </script>

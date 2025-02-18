@@ -35,7 +35,7 @@ const toGithub = () => {
 <template>
   <div class="rounded-md flex flex-col h-screen">
     <header
-      class="bg-[rgba(242,197,211,0.5)] shadow-md flex justify-between items-center p-4 rounded-t-md"
+      class="bg-[rgba(242,197,211,0.5)] shadow-md flex justify-between items-center p-2 md:p-4 rounded-t-md"
     >
       <div class="flex items-center">
         <img
@@ -49,30 +49,30 @@ const toGithub = () => {
         </h2>
       </div>
 
-      <nav class="hidden md:flex space-x-4">
+      <nav class="space-x-2 md:space-x-4">
         <button
-          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'login' }"
           @click="toPage('login')"
         >
           {{ $t("menu.login") }}
         </button>
         <button
-          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'upload' }"
           @click="toPage('upload')"
         >
           {{ $t("menu.upload") }}
         </button>
         <button
-          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'store' }"
           @click="toPage('store')"
         >
           {{ $t("menu.store") }}
         </button>
         <button
-          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'donate' }"
           @click="toPage('donate')"
         >
@@ -80,7 +80,7 @@ const toGithub = () => {
         </button>
       </nav>
 
-      <div class="flex items-center space-x-4">
+      <div class="hidden md:flex flex items-center space-x-2 md:space-x-4">
         <div class="relative" v-if="locale == 'zh'">
           <!-- <span
             class="absolute hidden bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 group-hover:block"

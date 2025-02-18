@@ -65,7 +65,7 @@ export default defineEventHandler(async (event) => {
             },
           ]);
         } catch {
-          console.log(`Add WaterMark Error ${filename}`);
+          // console.log(`Add WaterMark Error ${filename}`);
         }
       }
       // 保存原图

@@ -184,7 +184,7 @@ const getImages = () => {
     </div>
 
     <!-- Pagination Section -->
-    <div class="w-full px-4 sm:px-8 py-6">
+    <div class="w-full p-2 md:px-4">
       <div
         class="flex flex-col sm:flex-row justify-center items-center space-x-2 bg-white p-4 rounded-xl shadow-lg"
       >

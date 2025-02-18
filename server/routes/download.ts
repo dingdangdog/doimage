@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     try {
       // 检查文件是否存在
       if (fs.existsSync(filePath)) {
-        console.log("Downloading:", filePath);
+        // console.log("Downloading:", filePath);
 
         // 设置文件名（可选：从路径中提取文件名）
         const fileName = path.basename(filePath);
