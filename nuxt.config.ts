@@ -1,4 +1,3 @@
-import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   app: {
@@ -19,9 +18,6 @@ export default defineNuxtConfig({
   $development: {},
   $production: {},
   css: ["~/assets/css/base.css"],
-  build: {
-    transpile: ["vuetify"],
-  },
   runtimeConfig: {
     // The private keys which are only available server-side
     apiSecret: "",
@@ -31,15 +27,7 @@ export default defineNuxtConfig({
       apiBase: "/api",
     },
   },
-  modules: [
-    "@nuxtjs/i18n",
-    (_options, nuxt) => {
-      nuxt.hooks.hook("vite:extendConfig", (config) => {
-        // @ts-expect-error
-        config.plugins.push(vuetify({ autoImport: true }));
-      });
-    },
-  ],
+  modules: ["@nuxtjs/i18n"],
   // imports: {
   //   autoImport: true,
   // },
@@ -70,9 +58,7 @@ export default defineNuxtConfig({
   },
   vite: {
     vue: {
-      template: {
-        transformAssetUrls,
-      },
+      template: {},
     },
   },
 });

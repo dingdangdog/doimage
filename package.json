@@ -22,8 +22,6 @@
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
     "i": "^0.3.7",
-    "pnpm": "^9.7.0",
-    "vite-plugin-vuetify": "^2.0.4",
-    "vuetify": "^3.6.14"
+    "pnpm": "^9.7.0"
   }
 }
