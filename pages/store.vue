@@ -25,13 +25,14 @@ const images = ref<any[]>([]);
 const total = ref(0);
 const pageParam = ref({
   page: 1,
-  size: 40,
+  size: 30,
 });
 
 const changeFolder = () => {
   if (!folder.value) {
     return;
   }
+  // console.log(folder.value);
   window.localStorage.setItem("folder", folder.value);
   getImages();
 
@@ -91,9 +92,9 @@ const menuPosition = ref({ x: 0, y: 0 });
 const showMenu = (image: string, event: MouseEvent) => {
   selectImage.value = image;
   menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
-  if (window.innerWidth > 1280) {
-    menuPosition.value.x -= 256;
-  }
+  // if (window.innerWidth > 1280) {
+  //   menuPosition.value.x;
+  // }
   showImageMenu.value = true;
 };
 
@@ -138,56 +139,39 @@ const getImages = () => {
     });
 };
 </script>
-
 <template>
-  <div class="main-page flex flex-col h-full">
-    <div class="flex justify-center items-center w-full">
-      <div class="max-w-lg min-w-[20rem] w-full">
-        <div class="relative">
-          <select
-            class="block appearance-none w-full bg-[rgba(242,197,211,0.5)] border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-            :value="folder"
-            @change="changeFolder"
-          >
-            <option v-for="item in folders" :key="item" :value="item">
-              {{ item }}
-            </option>
-          </select>
-          <div
-            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
-          >
-            <svg
-              class="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
+  <div
+    class="flex flex-col h-full bg-gradient-to-t from-pink-100 via-pink-50 to-white"
+  >
+    <!-- Folder Select and Refresh Section -->
+    <div
+      class="flex justify-center items-center space-x-2 w-full max-w-xl mx-auto p-2 bg-white shadow-md rounded-lg"
+    >
+      <!-- Folder Select Dropdown -->
+      <select
+        class="block w-full bg-gradient-to-r from-pink-100 to-pink-50 text-gray-700 py-3 px-4 pr-8 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-pink-400"
+        v-model="folder"
+        @change="changeFolder"
+      >
+        <option v-for="item in folders" :key="item" :value="item">
+          {{ item }}
+        </option>
+      </select>
 
-      <div class="relative group">
-        <span
-          class="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10"
-        >
-          {{ $t("store.refresh") }}
-        </span>
-        <button
-          class="m-2 mt-[-1rem] border border-[rgba(246,70,124)] text-[rgba(246,70,124)] hover:bg-[rgba(246,70,124,0.1)] font-semibold rounded-full p-2 focus:outline-none focus:shadow-outline"
-          @click="refresh"
-        >
-          <IconRefresh class="w-6 h-6" color="rgba(246, 70, 124)" />
-        </button>
-      </div>
+      <!-- Refresh Button -->
+      <button
+        class="border border-pink-500 text-pink-500 hover:bg-pink-100 font-semibold rounded-full p-2 focus:outline-none focus:shadow-outline transition"
+        @click="refresh"
+      >
+        <IconRefresh class="w-6 h-6" color="rgba(246, 70, 124)" />
+      </button>
     </div>
 
+    <!-- Image Gallery Section -->
     <div
-      class="images-container flex-grow flex flex-wrap justify-center p-2 max-h-screen overflow-y-auto border border-gray-300 rounded-md"
+      class="mt-2 flex flex-wrap justify-left max-h-[80vh] p-4 overflow-y-auto border border-gray-300 rounded-md"
     >
-      <div v-if="images.length <= 0" class="text-gray-500">
+      <div v-if="images.length <= 0" class="text-gray-500 text-lg">
         {{ $t("store.images-container") }}
       </div>
       <ImageCard
@@ -198,72 +182,87 @@ const getImages = () => {
         @contextmenu.prevent="showMenu(image, $event)"
       />
     </div>
-    <div class="w-full">
-      <div class="flex items-center justify-center flex-wrap pt-4">
-        <div class="text-right text-gray-700">
-          {{ $t("page.total") }}:{{ total }}
-        </div>
-        <div class="min-w-[3rem] text-center mx-2 text-gray-700">
-          {{ $t("page.size") }}:{{ pageParam.size }}
-        </div>
-        <div class="flex items-center flex-wrap mx-2">
+
+    <!-- Pagination Section -->
+    <div class="w-full px-4 sm:px-8 py-6">
+      <div
+        class="flex flex-col sm:flex-row justify-center items-center space-x-2 bg-white p-4 rounded-xl shadow-lg"
+      >
+        <!-- Pagination Controls -->
+        <div class="flex items-center space-x-3 mt-4 sm:mt-0">
+          <!-- Previous Page Button -->
           <button
-            class="page-action-icon cursor-pointer m-0.5 text-[rgba(246,70,124)] hover:text-[rgba(246,70,124,0.7)] focus:outline-none"
+            class="pagination-btn text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:ring-pink-300 rounded-lg p-2"
+            :disabled="pageParam.page <= 1"
             @click="pageDown"
           >
-            <IconLeft class="w-6 h-6" color="rgba(246, 70, 124)" />
+            <IconLeft class="w-6 h-6" />
           </button>
-          <div class="min-w-[3rem] text-center text-gray-700">
-            {{ $t("page.num") }}:{{ pageParam.page }}
+
+          <!-- Page Numbers -->
+          <div class="text-sm text-gray-700">
+            <span>{{ $t("page.num") }}:</span>
+            <span class="font-semibold">{{ pageParam.page }}</span> /
+            <span class="font-semibold">{{
+              Math.ceil(total / pageParam.size)
+            }}</span>
           </div>
+
+          <!-- Next Page Button -->
           <button
-            class="page-action-icon cursor-pointer m-0.5 text-[rgba(246,70,124)] hover:text-[rgba(246,70,124,0.7)] focus:outline-none"
+            class="pagination-btn text-white bg-pink-500 hover:bg-pink-600 focus:ring-4 focus:ring-pink-300 rounded-lg p-2"
+            :disabled="pageParam.page >= Math.ceil(total / pageParam.size)"
             @click="pageUp"
           >
-            <IconRight class="w-6 h-6" color="rgba(246, 70, 124)" />
+            <IconRight class="w-6 h-6" />
           </button>
         </div>
-        <button
-          @click="jumpPageDialog = true"
-          class="text-sm text-[rgba(246,70,124)] cursor-pointer focus:outline-none"
-        >
-          跳页
-        </button>
+
+        <!-- Jump to Page -->
+        <div class="flex space-x-2 items-center">
+          <!-- Total and Size Info -->
+          <div class="text-sm">
+            <strong>{{ $t("page.total") }}:</strong> {{ total }}
+          </div>
+          <div class="text-sm">
+            <strong>{{ $t("page.size") }}:</strong> {{ pageParam.size }}
+          </div>
+          <button
+            @click="jumpPageDialog = true"
+            class="text-sm text-pink-500 cursor-pointer focus:outline-none hover:underline"
+          >
+            跳页
+          </button>
+        </div>
       </div>
     </div>
+
+    <!-- Jump Page Dialog -->
     <div
       v-if="jumpPageDialog"
-      class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center"
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
     >
-      <div
-        class="fixed inset-0 bg-black opacity-50"
-        @click="jumpPageDialog = false"
-      ></div>
-      <div
-        class="bg-[rgba(255,208,223,0.5)] rounded-lg p-4 shadow-xl z-10 min-w-[20rem] max-w-lg"
-      >
+      <div class="bg-white rounded-lg p-6 shadow-xl min-w-[20rem] max-w-lg">
         <h3 class="text-lg font-semibold text-gray-900 mb-2">
           {{ $t("store.jump-page") }}
         </h3>
         <div class="mb-4">
-          <div class="relative">
-            <input
-              type="number"
-              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-              :placeholder="$t('page.num')"
-              v-model.number="jumpPage"
-            />
-          </div>
+          <input
+            type="number"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-pink-500"
+            :placeholder="$t('page.num')"
+            v-model.number="jumpPage"
+          />
         </div>
-        <div class="flex justify-end">
+        <div class="flex justify-end space-x-4">
           <button
-            class="bg-transparent hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded focus:outline-none focus:shadow-outline mr-2"
+            class="bg-transparent hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded focus:outline-none"
             @click="jumpPageDialog = false"
           >
             {{ $t("common.cancel") }}
           </button>
           <button
-            class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            class="bg-pink-500 hover:bg-pink-600 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-pink-400"
             @click="toJumpPage"
           >
             {{ $t("common.confirm") }}
@@ -272,21 +271,24 @@ const getImages = () => {
       </div>
     </div>
 
+    <!-- Fullscreen Image Overlay -->
     <div
-      class="overlay fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-80 text-center"
       v-if="fullscrenn"
+      class="overlay fixed z-50 top-0 left-0 w-full h-full bg-black bg-opacity-80 text-center flex items-center justify-center"
     >
       <img
         :src="fullscreenImage"
         alt="Fullscreen Image"
-        class="fullscreen-image max-w-full max-h-full m-auto block absolute top-0 left-0 right-0 bottom-0"
+        class="fullscreen-image max-w-full max-h-full m-auto block"
       />
       <span
-        class="close-button color-gray-300 text-3xl absolute top-2 right-5 cursor-pointer"
+        class="close-button text-red-500 text-3xl absolute top-2 right-5 cursor-pointer"
         @click="closeFullscreen"
         >&times;</span
       >
     </div>
+
+    <!-- Image Context Menu -->
     <ImageMenu
       v-if="showImageMenu"
       :showMenu="showImageMenu"
@@ -298,6 +300,4 @@ const getImages = () => {
   </div>
 </template>
 
-<style scoped>
-/* Tailwind classes used - стили перенесены в template */
-</style>
+<style scoped></style>

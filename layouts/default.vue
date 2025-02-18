@@ -51,28 +51,28 @@ const toGithub = () => {
 
       <nav class="hidden md:flex space-x-4">
         <button
-          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'login' }"
           @click="toPage('login')"
         >
           {{ $t("menu.login") }}
         </button>
         <button
-          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'upload' }"
           @click="toPage('upload')"
         >
           {{ $t("menu.upload") }}
         </button>
         <button
-          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'store' }"
           @click="toPage('store')"
         >
           {{ $t("menu.store") }}
         </button>
         <button
-          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'donate' }"
           @click="toPage('donate')"
         >
@@ -88,8 +88,8 @@ const toGithub = () => {
           > -->
           <button
             @click="changeLang"
-            title="Change to English"
-            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+            title="Click Change Language"
+            class="group relative w-8 h-8 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
           >
             En
           </button>
@@ -101,8 +101,8 @@ const toGithub = () => {
           > -->
           <button
             @click="changeLang"
-            title="切换简体中文"
-            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+            title="点击切换语言"
+            class="group relative w-8 h-8 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
           >
             简
           </button>

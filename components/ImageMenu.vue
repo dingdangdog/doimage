@@ -53,35 +53,35 @@ const toDelete = () => {
 <template>
   <div
     id="manager-menu"
-    class="absolute bg-[rgba(208,78,137,0.8)] border border-gray-300 p-1 rounded-md z-[9999]"
+    class="absolute bg-[rgba(208,78,137,0.9)] border border-gray-300 p-1 rounded-md z-[9999]"
     :style="{ top: `${y}px`, left: `${x}px` }"
   >
     <div
-      class="menu text-white text-center mx-2 my-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[rgba(208,78,137,2)]"
+      class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyThumbUrl"
     >
       复制缩略图URL
     </div>
     <div
-      class="menu text-white text-center mx-2 my-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[rgba(208,78,137,2)]"
+      class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyUrl"
     >
       复制原图URL
     </div>
     <div
-      class="menu text-white text-center mx-2 my-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[rgba(208,78,137,2)]"
+      class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyMarkdownl"
     >
       复制Markdown
     </div>
     <div
-      class="menu text-white text-center mx-2 my-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[rgba(208,78,137,2)]"
+      class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="toDownload"
     >
       下载
     </div>
     <div
-      class="menu text-white text-center mx-2 my-2 px-2 py-1 rounded-md cursor-pointer hover:bg-[rgba(208,78,137,2)]"
+      class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="toDelete"
     >
       删除

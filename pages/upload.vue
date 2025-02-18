@@ -128,7 +128,7 @@ const showMenu = (image: string, event: MouseEvent) => {
   selectImage.value = image;
   menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
   if (window.innerWidth > 1280) {
-    menuPosition.value.x -= 256;
+    menuPosition.value.x -= 64;
   }
   showImageMenu.value = true;
 };
@@ -158,11 +158,9 @@ onMounted(() => {
   <div class="bg-gray-50 h-full flex flex-col p-2">
     <!-- Header Section -->
     <div
-      class="max-w-5xl w-full mx-auto p-6 bg-pink-50 rounded-xl shadow-lg space-y-6 sm:px-6 lg:px-8 py-6 flex-grow"
+      class="max-w-5xl w-full mx-auto p-2 md:p-6 bg-pink-50 rounded-xl shadow-lg space-y-3 flex-grow"
     >
-      <h3 class="text-xl font-semibold text-gray-900">
-        {{ $t("upload.settings") }}
-      </h3>
+      <h3 class="text-xl font-semibold text-gray-900">上传配置</h3>
       <!-- 水印设置 -->
       <div>
         <label for="watermark" class="block text-sm font-semibold text-pink-700"
@@ -180,7 +178,7 @@ onMounted(() => {
       <div class="flex flex-col md:flex-row justify-between md:space-x-4">
         <fieldset class="p-4 border border-pink-300 rounded-lg bg-white">
           <legend class="text-sm font-semibold text-pink-700">
-            是否开启水印
+            是否添加水印
           </legend>
           <div class="mt-3 flex space-x-6">
             <label class="flex items-center space-x-2 cursor-pointer">
@@ -191,7 +189,7 @@ onMounted(() => {
                 v-model="addWatermark"
                 class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
               />
-              <span class="text-gray-700 text-sm font-medium">开启</span>
+              <span class="text-gray-700 text-sm font-medium">是</span>
             </label>
             <label class="flex items-center space-x-2 cursor-pointer">
               <input
@@ -201,7 +199,7 @@ onMounted(() => {
                 v-model="addWatermark"
                 class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
               />
-              <span class="text-gray-700 text-sm font-medium">不开启</span>
+              <span class="text-gray-700 text-sm font-medium">否</span>
             </label>
           </div>
         </fieldset>
@@ -223,7 +221,7 @@ onMounted(() => {
           <select
             id="folderSelect"
             class="mt-2 w-full rounded-lg border border-pink-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-pink-500 focus:ring-pink-500"
-            :value="folder"
+            v-model="folder"
           >
             <option v-for="folder in folders" :key="folder" :value="folder">
               {{ folder }}
@@ -268,7 +266,7 @@ onMounted(() => {
               @click.stop="$refs.fileInput.click()"
               class="text-purple-800 font-semibold hover:text-purple-700 focus:outline-none"
             >
-              上传图片
+              选择图片
             </button>
           </p>
           <p class="text-sm mt-2"></p>
@@ -297,9 +295,7 @@ onMounted(() => {
 
       <div class="bg-white shadow-lg rounded-lg mb-8">
         <div class="p-6 border-b border-gray-200 bg-gray-100">
-          <h3 class="text-xl font-semibold text-gray-900">
-            {{ $t("upload.upload_result_title") }}
-          </h3>
+          <h3 class="text-xl font-semibold text-gray-900">上传结果</h3>
         </div>
         <!-- Result Display -->
         <div class="bg-white overflow-hidden shadow-lg rounded-lg mb-8">
@@ -341,7 +337,7 @@ onMounted(() => {
       class="fullscreen-image max-w-full max-h-full m-auto block rounded-lg"
     />
     <span
-      class="close-button text-gray-100 text-4xl absolute top-6 right-10 cursor-pointer"
+      class="close-button text-red-500 text-4xl absolute top-6 right-10 cursor-pointer"
       @click="closeFullscreen"
       >&times;</span
     >

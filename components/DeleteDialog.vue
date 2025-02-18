@@ -39,20 +39,7 @@ const delImage = () => {
             <div
               class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
             >
-              <svg
-                class="h-6 w-6 text-red-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 9v2m0 4h.01m-6.938-9.077l-2.29 2.29a1 1 0 001.414 1.414L19.708 13.708a1 1 0 001.414-1.414l-2.289-2.29c-.462-.462-.99-.717-1.585-.717H5.046c-.595 0-1.123.255-1.585.717z"
-                />
-              </svg>
+              <IconDelete class="h-6 w-6" color="rgba(246, 70, 124)" />
             </div>
             <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
               <h3
@@ -75,14 +62,14 @@ const delImage = () => {
             class="ml-2 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
             @click="delImage"
           >
-            Confirm
+            确定
           </button>
           <button
             type="button"
             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
             @click="showDeleteDialog = false"
           >
-            Cancel
+            取消
           </button>
         </div>
       </div>
