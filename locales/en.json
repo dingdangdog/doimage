@@ -28,6 +28,13 @@
     "jumpPage": "Page Jump",
     "images-container": "Picture display area, please click the refresh button for the first entry."
   },
+  "image-menu": {
+    "copy-compress": "Copy Compress Url",
+    "copy-origin": "Copy Origin Url",
+    "copy-markdown": "Copy Markdown",
+    "download": "Download",
+    "delete": "Delete"
+  },
   "common": {
     "cancel": "Cancel",
     "confirm": "Confirm",

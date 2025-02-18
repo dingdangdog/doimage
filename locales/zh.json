@@ -28,6 +28,13 @@
     "refresh": "刷新",
     "images-container": "图片展示区，首次进入请点击刷新按钮"
   },
+  "image-menu": {
+    "copy-compress": "复制缩略图Url",
+    "copy-origin": "复制原图Url",
+    "copy-markdown": "复制Markdown",
+    "download": "下载",
+    "delete": "删除"
+  },
   "common": {
     "cancel": "取消",
     "confirm": "确定",

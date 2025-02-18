@@ -60,31 +60,31 @@ const toDelete = () => {
       class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyThumbUrl"
     >
-      复制缩略图URL
+      {{ $t("image-menu.copy-compress") }}
     </div>
     <div
       class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyUrl"
     >
-      复制原图URL
+      {{ $t("image-menu.copy-origin") }}
     </div>
     <div
       class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="copyMarkdownl"
     >
-      复制Markdown
+      {{ $t("image-menu.copy-markdown") }}
     </div>
     <div
       class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="toDownload"
     >
-      下载
+      {{ $t("image-menu.download") }}
     </div>
     <div
       class="menu text-gray-200 text-center px-4 py-2 rounded-md cursor-pointer hover:text-white hover:bg-[rgba(208,78,137,2)]"
       @click="toDelete"
     >
-      删除
+      {{ $t("image-menu.delete") }}
     </div>
   </div>
 </template>
