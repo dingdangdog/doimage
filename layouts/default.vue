@@ -51,28 +51,28 @@ const toGithub = () => {
 
       <nav class="space-x-2 md:space-x-4">
         <button
-          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-2 py-1 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'login' }"
           @click="toPage('login')"
         >
           {{ $t("menu.login") }}
         </button>
         <button
-          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-2 py-1 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'upload' }"
           @click="toPage('upload')"
         >
           {{ $t("menu.upload") }}
         </button>
         <button
-          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-2 py-1 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'store' }"
           @click="toPage('store')"
         >
           {{ $t("menu.store") }}
         </button>
         <button
-          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          class="text-lg md:text-xl text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-2 py-1 rounded-md text-sm font-medium focus:outline-none"
           :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'donate' }"
           @click="toPage('donate')"
         >
