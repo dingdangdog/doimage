@@ -19,15 +19,16 @@ const rules = ref([
   },
 ]);
 
-const folders = ref<any[]>([]);
-const folder = ref("");
-const watermark = ref("");
-const addWatermark = ref("2");
-const resIamges = ref<any[]>([]);
-const selectIamges = ref<File[]>([]);
-const uploading = ref(false);
-const showAddFolderDialog = ref(false);
+const folders = ref<any[]>([]); // 可选文件夹
+const folder = ref(""); // 选中的上传文件夹
+const watermark = ref(""); // 水印内容
+const addWatermark = ref("2"); // 是否添加水印，1开启，2不开启
 
+const resIamges = ref<any[]>([]); // 上传结果
+const selectIamges = ref<File[] | any[]>([]); // 选中的上传文件
+const uploading = ref(false); // 上传中
+
+const showAddFolderDialog = ref(false);
 const showAddFolder = () => {
   showAddFolderDialog.value = true;
 };
@@ -132,6 +133,14 @@ const showMenu = (image: string, event: MouseEvent) => {
   showImageMenu.value = true;
 };
 
+const dragOver = ref(false);
+// 处理拖放文件
+const handleDrop = async (e: any) => {
+  dragOver.value = false;
+  const files = Array.from(e.dataTransfer.files);
+  selectIamges.value = files; // 存储 File 对象，而不是 URL
+};
+
 onMounted(() => {
   check();
   getFolders();
@@ -146,166 +155,146 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="bg-gray-50 h-full flex flex-col">
+  <div class="bg-gray-50 h-full flex flex-col p-2">
     <!-- Header Section -->
-    <div class="max-w-5xl w-full mx-auto sm:px-6 lg:px-8 py-6 flex-grow">
-      <div class="bg-white shadow-lg rounded-lg mb-8">
-        <div class="p-6 border-b border-gray-200 bg-gray-100">
-          <h3 class="text-xl font-semibold text-gray-900">
-            {{ $t("upload.settings") }}
-          </h3>
-        </div>
+    <div
+      class="max-w-5xl w-full mx-auto p-6 bg-pink-50 rounded-xl shadow-lg space-y-6 sm:px-6 lg:px-8 py-6 flex-grow"
+    >
+      <h3 class="text-xl font-semibold text-gray-900">
+        {{ $t("upload.settings") }}
+      </h3>
+      <!-- 水印设置 -->
+      <div>
+        <label for="watermark" class="block text-sm font-semibold text-pink-700"
+          >水印内容</label
+        >
+        <input
+          type="text"
+          id="watermark"
+          class="mt-2 w-full rounded-lg border border-pink-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-pink-500 focus:ring-pink-500"
+          placeholder="请输入水印文字"
+          v-model="watermark"
+        />
+      </div>
 
-        <!-- Watermark Settings -->
-        <div class="space-y-6 bg-white p-6 rounded-xl shadow-md">
-          <!-- Watermark Input -->
-          <div>
-            <label
-              for="watermark"
-              class="block text-sm font-semibold text-gray-800"
-            >
-              水印
-            </label>
-            <div class="mt-2 relative">
+      <div class="flex flex-col md:flex-row justify-between md:space-x-4">
+        <fieldset class="p-4 border border-pink-300 rounded-lg bg-white">
+          <legend class="text-sm font-semibold text-pink-700">
+            是否开启水印
+          </legend>
+          <div class="mt-3 flex space-x-6">
+            <label class="flex items-center space-x-2 cursor-pointer">
               <input
-                type="text"
-                id="watermark"
-                class="block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                placeholder="请输入水印文字"
-                v-model="watermark"
+                name="watermark"
+                type="radio"
+                value="1"
+                v-model="addWatermark"
+                class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
               />
-            </div>
+              <span class="text-gray-700 text-sm font-medium">开启</span>
+            </label>
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input
+                name="watermark"
+                type="radio"
+                value="2"
+                v-model="addWatermark"
+                class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
+              />
+              <span class="text-gray-700 text-sm font-medium">不开启</span>
+            </label>
           </div>
-
-          <!-- Watermark Option -->
-          <fieldset class="p-4 border border-gray-300 rounded-lg bg-gray-50">
-            <legend class="text-sm font-semibold text-gray-800">
-              水印选项
-            </legend>
-            <div class="mt-3 flex space-x-6">
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input
-                  id="setmark"
-                  name="watermark-option"
-                  type="radio"
-                  value="1"
-                  v-model="addWatermark"
-                  class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                />
-                <span class="text-gray-700 text-sm font-medium">添加水印</span>
-              </label>
-              <label class="flex items-center space-x-2 cursor-pointer">
-                <input
-                  id="unsetmark"
-                  name="watermark-option"
-                  type="radio"
-                  value="2"
-                  v-model="addWatermark"
-                  class="h-4 w-4 text-blue-600 border-gray-300 focus:ring-blue-500"
-                />
-                <span class="text-gray-700 text-sm font-medium"
-                  >不添加水印</span
-                >
-              </label>
-            </div>
-          </fieldset>
-
-          <!-- Folder Select -->
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            <div>
-              <label
-                for="folderSelect"
-                class="block text-sm font-semibold text-gray-800"
-              >
-                选择文件夹
-              </label>
-              <select
-                id="folderSelect"
-                class="mt-2 block w-full rounded-lg border border-gray-300 bg-gray-50 px-4 py-2 text-gray-900 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-                :value="folder"
-                @change="changeFolder"
-              >
-                <option v-for="item in folders" :key="item" :value="item">
-                  {{ item }}
-                </option>
-              </select>
-            </div>
-
-            <div class="flex justify-start sm:justify-end">
-              <button
-                class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-gradient-to-r from-blue-500 to-indigo-600 rounded-lg shadow-md hover:from-blue-600 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                @click="showAddFolder"
-              >
-                <svg
-                  class="h-5 w-5 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-                添加文件夹
-              </button>
-            </div>
-          </div>
-
-          <div
-            @dragover.prevent="dragOver = true"
-            @dragleave="dragOver = false"
-            @drop.prevent="handleDrop"
-            @click.stop="$refs.fileInput.click()"
-            class="mt-6 border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-50 hover:bg-indigo-100/50 hover:border-indigo-700 transition-all ease-in-out"
-            :class="{
-              'border-indigo-700 bg-blue-50': dragOver,
-              'border-gray-300': !dragOver,
-            }"
-          >
-            <input
-              type="file"
-              multiple
-              accept="image/*"
-              @change="handleFileChange"
-              class="hidden"
-              ref="fileInput"
-            />
-            <div
-              class="text-gray-500 transition-all"
-              :class="{
-                'my-0': selectIamges.length > 0,
-                'my-16': selectIamges.length === 0,
-              }"
+        </fieldset>
+        <!-- 文件夹设置 -->
+        <div>
+          <div class="flex items-center space-x-4">
+            <label
+              for="folderSelect"
+              class="block text-sm font-semibold text-pink-700"
+              >选择上传文件夹</label
             >
-              <p>
-                <!-- {{ $t("watermark.upload-tip") }} -->
-                拖拽或
-                <button
-                  type="button"
-                  @click.stop="$refs.fileInput.click()"
-                  class="text-purple-800 font-semibold hover:text-purple-700 focus:outline-none"
-                >
-                  上传图片
-                </button>
-              </p>
-              <p class="text-sm mt-2"></p>
-            </div>
-          </div>
-          <div class="flex justify-center mt-4">
             <button
-              class="inline-flex items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-              :disabled="uploading"
-              @click="uploadImages"
+              class="px-4 py-2 text-sm font-medium text-white bg-pink-500 rounded-lg shadow-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
+              @click="showAddFolder"
             >
-              {{ $t("upload.upload") }}
+              新建文件夹
             </button>
           </div>
+          <select
+            id="folderSelect"
+            class="mt-2 w-full rounded-lg border border-pink-300 bg-white px-4 py-2 text-gray-900 shadow-sm focus:border-pink-500 focus:ring-pink-500"
+            :value="folder"
+          >
+            <option v-for="folder in folders" :key="folder" :value="folder">
+              {{ folder }}
+            </option>
+          </select>
         </div>
       </div>
 
-      <!-- File Upload Section -->
+      <!-- 新建文件夹弹窗 -->
+
+      <div
+        @dragover.prevent="dragOver = true"
+        @dragleave="dragOver = false"
+        @drop.prevent="handleDrop"
+        @click.stop="$refs.fileInput.click()"
+        class="mt-6 border-2 border-dashed rounded-lg p-8 text-center cursor-pointer bg-gray-50 hover:bg-indigo-100/50 hover:border-indigo-700 transition-all ease-in-out"
+        :class="{
+          'border-indigo-700 bg-blue-50': dragOver,
+          'border-gray-300': !dragOver,
+        }"
+      >
+        <input
+          type="file"
+          multiple
+          accept="image/*"
+          @change="handleFileChange"
+          class="hidden"
+          ref="fileInput"
+        />
+        <div
+          class="text-gray-500 transition-all"
+          :class="{
+            'my-0': selectIamges.length > 0,
+            'my-16': selectIamges.length === 0,
+          }"
+        >
+          <p>
+            <!-- {{ $t("watermark.upload-tip") }} -->
+            拖拽或
+            <button
+              type="button"
+              @click.stop="$refs.fileInput.click()"
+              class="text-purple-800 font-semibold hover:text-purple-700 focus:outline-none"
+            >
+              上传图片
+            </button>
+          </p>
+          <p class="text-sm mt-2"></p>
+        </div>
+      </div>
+      <!-- 使其自动换行 -->
+      <div class="flex flex-wrap space-x-2" v-if="selectIamges.length > 0">
+        <span
+          v-for="image in selectIamges"
+          :key="image.name"
+          :title="image.name"
+          class="bg-gray-100 px-2 py-1 rounded-md shadow-md max-w-40 text-ellipsis line-clamp-1 mt-2"
+        >
+          {{ image.name }}
+        </span>
+      </div>
+      <div class="flex justify-center mt-2">
+        <button
+          class="inline-flex items-center px-6 py-3 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          :disabled="uploading"
+          @click="uploadImages"
+        >
+          {{ $t("upload.upload") }}
+        </button>
+      </div>
+
       <div class="bg-white shadow-lg rounded-lg mb-8">
         <div class="p-6 border-b border-gray-200 bg-gray-100">
           <h3 class="text-xl font-semibold text-gray-900">
@@ -337,6 +326,8 @@ onMounted(() => {
         </div>
       </div>
     </div>
+
+    <!-- File Upload Section -->
   </div>
 
   <!-- Fullscreen Image View -->
@@ -368,7 +359,8 @@ onMounted(() => {
   <DeleteDialog v-if="showDeleteDialog" />
   <AddFolderDialog
     v-if="showAddFolderDialog"
-    :addFolder="addFolder"
-    :close-dialog="closeAddFolderDialog"
+    :showDialog="showAddFolderDialog"
+    @addFolder="addFolder"
+    @close-dialog="closeAddFolderDialog"
   />
 </template>
