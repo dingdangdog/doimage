@@ -1,148 +1,11 @@
-<template>
-  <div class="main-page">
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-      "
-    >
-      <div style="max-width: 30rem; min-width: 20rem">
-        <v-select
-          chips
-          bg-color="rgba(242, 197, 211, 0.5)"
-          :label="$t('store.select-folder')"
-          :items="folders"
-          v-model="folder"
-          @update:model-value="changeFolder"
-        ></v-select>
-      </div>
-
-      <v-tooltip :text="$t('store.refresh')">
-        <template v-slot:activator="{ props }">
-          <v-btn
-            v-bind="props"
-            variant="outlined"
-            icon="mdi-refresh"
-            color="rgba(246, 70, 124)"
-            style="margin: 0.5rem; margin-top: -1rem"
-            @click="refresh"
-          >
-          </v-btn>
-        </template>
-      </v-tooltip>
-    </div>
-
-    <div class="images-container">
-      <div v-if="images.length <= 0">
-        {{ $t("store.images-container") }}
-      </div>
-      <ImageCard
-        v-for="image in images"
-        :key="image"
-        :image="image"
-        @click="openFullscreen(image)"
-        @contextmenu.prevent="showMenu(image)"
-      />
-    </div>
-    <div style="width: 100%">
-      <div
-        style="
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          padding-top: 1rem;
-        "
-      >
-        <div style="text-align: right">{{ $t("page.total") }}:{{ total }}</div>
-        <div style="min-width: 3rem; text-align: center; margin: 0 0.5rem">
-          {{ $t("page.size") }}:{{ pageParam.size }}
-          <!-- <v-autocomplete
-            bg-color="rgba(242, 197, 211, 0.5)"
-            :label="$t('page.size')"
-            variant="underlined"
-            hide-details="auto"
-            v-model="page.size"
-            :items="[20, 40, 60, 80, 100]"
-          ></v-autocomplete> -->
-        </div>
-        <div
-          style="
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-            margin: 0 0.5rem;
-          "
-        >
-          <v-icon
-            color="rgba(246, 70, 124)"
-            icon="mdi-chevron-left-circle-outline"
-            class="page-action-icon"
-            @click="pageDown"
-          ></v-icon>
-          <div style="min-width: 3rem; text-align: center">
-            {{ $t("page.num") }}:{{ pageParam.page }}
-            <!-- <v-text-field
-              hide-details="auto"
-              variant="underlined"
-              :label="$t('page.num')"
-              v-model="page.page"
-            ></v-text-field> -->
-          </div>
-          <v-icon
-            color="rgba(246, 70, 124)"
-            icon="mdi-chevron-right-circle-outline"
-            class="page-action-icon"
-            @click="pageUp"
-          ></v-icon>
-        </div>
-        <span @click="jumpPageDialog = true" style="cursor: pointer">跳页</span>
-      </div>
-    </div>
-  </div>
-  <v-dialog v-model="jumpPageDialog" style="max-width: 30rem">
-    <v-card color="rgba(255, 208, 223, 0.5)">
-      <v-card-title>
-        <span class="text-h5">{{ $t("store.jump-page") }}</span>
-      </v-card-title>
-      <v-card-text>
-        <v-text-field
-          hide-details="auto"
-          variant="underlined"
-          :label="$t('page.num')"
-          v-model="jumpPage"
-        ></v-text-field>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn @click="jumpPageDialog = false">{{ $t("common.cancel") }}</v-btn>
-        <v-btn @click="toJumpPage">{{ $t("common.confirm") }}</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <!-- 图片蒙版 -->
-  <div class="overlay" v-if="fullscrenn">
-    <v-img
-      :src="fullscreenImage"
-      alt="Fullscreen Image"
-      class="fullscreen-image"
-    />
-    <span class="close-button" @click="closeFullscreen">&times;</span>
-  </div>
-  <ImageMenu
-    v-if="showImageMenu"
-    :showMenu="showImageMenu"
-    :image="selectImage"
-    :x="menuPosition.x"
-    :y="menuPosition.y"
-  />
-  <DeleteDialog v-if="showDeleteDialog" />
-</template>
-
 <script setup lang="ts">
-import { showDeleteDialog } from "../utils";
+import {
+  doApi,
+  errorAlert,
+  warningAlert,
+  check,
+  showDeleteDialog,
+} from "../utils";
 
 const jumpPageDialog = ref(false);
 const jumpPage = ref(1);
@@ -156,7 +19,7 @@ const toJumpPage = () => {
 };
 
 const folders = ref<any[]>([]);
-const folder = ref();
+const folder = ref(""); // Initialize as empty string
 const images = ref<any[]>([]);
 
 const total = ref(0);
@@ -169,7 +32,7 @@ const changeFolder = () => {
   if (!folder.value) {
     return;
   }
-
+  window.localStorage.setItem("folder", folder.value);
   getImages();
 
   doApi("/api/getTotalImage", { folder: folder.value })
@@ -188,6 +51,10 @@ const refresh = () => {
 const pageUp = () => {
   if (pageParam.value.page < Math.ceil(total.value / pageParam.value.size)) {
     pageParam.value.page++;
+    if (pageParam.value.page > Math.ceil(total.value / pageParam.value.size)) {
+      pageParam.value.page = Math.ceil(total.value / pageParam.value.size);
+      warningAlert("This is the last page");
+    }
   } else {
     warningAlert("No more page");
   }
@@ -221,28 +88,30 @@ const handleKeydown = (event: KeyboardEvent) => {
 const selectImage = ref("");
 const showImageMenu = ref(false);
 const menuPosition = ref({ x: 0, y: 0 });
-const showMenu = (image: string) => {
-  // window.preventDefault();
+const showMenu = (image: string, event: MouseEvent) => {
   selectImage.value = image;
-  // @ts-ignore
   menuPosition.value = { x: event.clientX, y: event.clientY - 64 };
   if (window.innerWidth > 1280) {
     menuPosition.value.x -= 256;
   }
   showImageMenu.value = true;
 };
+
 onMounted(() => {
   check();
   doApi("/api/getFolders", {})
     .then((res) => {
       folders.value = Array.isArray(res) ? res : [];
-
-      changeFolder();
+      if (folders.value.length > 0) {
+        folder.value = String(
+          window.localStorage.getItem("folder") || folders.value[0]
+        ); // Select first folder if no folder in localStorage and folders are available
+        changeFolder(); // Load images for the initial folder
+      }
     })
     .catch((err) => {
       errorAlert("Api Error");
     });
-  folder.value = String(window.localStorage.getItem("folder") || "");
 
   document.addEventListener("click", (event) => {
     showImageMenu.value = false;
@@ -254,13 +123,14 @@ watch(pageParam.value, () => {
 });
 
 const getImages = () => {
+  if (!folder.value) return; // Prevent API call if folder is not selected
+
   doApi("/api/getImages", {
     folder: folder.value,
     start: (pageParam.value.page - 1) * pageParam.value.size,
     num: pageParam.value.size,
   })
     .then((res) => {
-      // successAlert("Success");
       images.value = Array.isArray(res) ? res : [];
     })
     .catch(() => {
@@ -269,60 +139,165 @@ const getImages = () => {
 };
 </script>
 
+<template>
+  <div class="main-page flex flex-col h-full">
+    <div class="flex justify-center items-center w-full">
+      <div class="max-w-lg min-w-[20rem] w-full">
+        <div class="relative">
+          <select
+            class="block appearance-none w-full bg-[rgba(242,197,211,0.5)] border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+            :value="folder"
+            @change="changeFolder"
+          >
+            <option v-for="item in folders" :key="item" :value="item">
+              {{ item }}
+            </option>
+          </select>
+          <div
+            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
+          >
+            <svg
+              class="fill-current h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"
+              />
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="relative group">
+        <span
+          class="absolute hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10"
+        >
+          {{ $t("store.refresh") }}
+        </span>
+        <button
+          class="m-2 mt-[-1rem] border border-[rgba(246,70,124)] text-[rgba(246,70,124)] hover:bg-[rgba(246,70,124,0.1)] font-semibold rounded-full p-2 focus:outline-none focus:shadow-outline"
+          @click="refresh"
+        >
+          <IconRefresh class="w-6 h-6" color="rgba(246, 70, 124)" />
+        </button>
+      </div>
+    </div>
+
+    <div
+      class="images-container flex-grow flex flex-wrap justify-center p-2 max-h-screen overflow-y-auto border border-gray-300 rounded-md"
+    >
+      <div v-if="images.length <= 0" class="text-gray-500">
+        {{ $t("store.images-container") }}
+      </div>
+      <ImageCard
+        v-for="image in images"
+        :key="image"
+        :image="image"
+        @click="openFullscreen(image)"
+        @contextmenu.prevent="showMenu(image, $event)"
+      />
+    </div>
+    <div class="w-full">
+      <div class="flex items-center justify-center flex-wrap pt-4">
+        <div class="text-right text-gray-700">
+          {{ $t("page.total") }}:{{ total }}
+        </div>
+        <div class="min-w-[3rem] text-center mx-2 text-gray-700">
+          {{ $t("page.size") }}:{{ pageParam.size }}
+        </div>
+        <div class="flex items-center flex-wrap mx-2">
+          <button
+            class="page-action-icon cursor-pointer m-0.5 text-[rgba(246,70,124)] hover:text-[rgba(246,70,124,0.7)] focus:outline-none"
+            @click="pageDown"
+          >
+            <IconLeft class="w-6 h-6" color="rgba(246, 70, 124)" />
+          </button>
+          <div class="min-w-[3rem] text-center text-gray-700">
+            {{ $t("page.num") }}:{{ pageParam.page }}
+          </div>
+          <button
+            class="page-action-icon cursor-pointer m-0.5 text-[rgba(246,70,124)] hover:text-[rgba(246,70,124,0.7)] focus:outline-none"
+            @click="pageUp"
+          >
+            <IconRight class="w-6 h-6" color="rgba(246, 70, 124)" />
+          </button>
+        </div>
+        <button
+          @click="jumpPageDialog = true"
+          class="text-sm text-[rgba(246,70,124)] cursor-pointer focus:outline-none"
+        >
+          跳页
+        </button>
+      </div>
+    </div>
+    <div
+      v-if="jumpPageDialog"
+      class="fixed z-50 inset-0 overflow-y-auto flex items-center justify-center"
+    >
+      <div
+        class="fixed inset-0 bg-black opacity-50"
+        @click="jumpPageDialog = false"
+      ></div>
+      <div
+        class="bg-[rgba(255,208,223,0.5)] rounded-lg p-4 shadow-xl z-10 min-w-[20rem] max-w-lg"
+      >
+        <h3 class="text-lg font-semibold text-gray-900 mb-2">
+          {{ $t("store.jump-page") }}
+        </h3>
+        <div class="mb-4">
+          <div class="relative">
+            <input
+              type="number"
+              class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              :placeholder="$t('page.num')"
+              v-model.number="jumpPage"
+            />
+          </div>
+        </div>
+        <div class="flex justify-end">
+          <button
+            class="bg-transparent hover:bg-gray-200 text-gray-700 font-semibold py-2 px-4 border border-gray-300 rounded focus:outline-none focus:shadow-outline mr-2"
+            @click="jumpPageDialog = false"
+          >
+            {{ $t("common.cancel") }}
+          </button>
+          <button
+            class="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            @click="toJumpPage"
+          >
+            {{ $t("common.confirm") }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="overlay fixed z-40 top-0 left-0 w-full h-full bg-black bg-opacity-80 text-center"
+      v-if="fullscrenn"
+    >
+      <img
+        :src="fullscreenImage"
+        alt="Fullscreen Image"
+        class="fullscreen-image max-w-full max-h-full m-auto block absolute top-0 left-0 right-0 bottom-0"
+      />
+      <span
+        class="close-button color-gray-300 text-3xl absolute top-2 right-5 cursor-pointer"
+        @click="closeFullscreen"
+        >&times;</span
+      >
+    </div>
+    <ImageMenu
+      v-if="showImageMenu"
+      :showMenu="showImageMenu"
+      :image="selectImage"
+      :x="menuPosition.x"
+      :y="menuPosition.y"
+    />
+    <DeleteDialog v-if="showDeleteDialog" />
+  </div>
+</template>
+
 <style scoped>
-.row-input {
-  width: 20rem;
-}
-
-.images-container {
-  flex-grow: 1;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  max-height: 100vh;
-  width: 100%;
-  /* padding: 0.5rem; */
-
-  overflow-y: auto;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.page-action-icon {
-  cursor: pointer;
-  margin: 0.2rem;
-}
-
-/* 在这里添加样式来隐藏 overlay 和 fullscreen-image */
-.overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.8);
-  text-align: center;
-}
-
-.fullscreen-image {
-  max-width: 100%;
-  max-height: 100%;
-  margin: auto;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-
-.close-button {
-  color: rgb(156, 156, 156);
-  font-size: 30px;
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  cursor: pointer;
-}
+/* Tailwind classes used - стили перенесены в template */
 </style>

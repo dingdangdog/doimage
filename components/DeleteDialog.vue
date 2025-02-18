@@ -1,43 +1,11 @@
-<template>
-  <v-dialog
-    v-model="showDeleteDialog"
-    transition="dialog-bottom-transition"
-    max-width="30rem"
-    min-width="20rem"
-  >
-    <v-card>
-      <v-card-title>
-        <span class="text-h5">{{ $t("upload.add-folder") }}</span>
-      </v-card-title>
-      <v-card-text>
-        <p>确定删除当前选择的图片？删除后无法恢复！</p>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-          density="default"
-          @click="showDeleteDialog = false"
-          variant="elevated"
-        >
-          Cancel
-        </v-btn>
-        &nbsp;
-        <v-btn
-          density="default"
-          @click="delImage"
-          color="blue-lighten-3"
-          variant="elevated"
-        >
-          Confirm
-        </v-btn>
-        <v-spacer></v-spacer>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-</template>
-
 <script setup lang="ts">
-import { showDeleteDialog, deleteImage } from "../utils";
+import {
+  doApi,
+  showDeleteDialog,
+  deleteImage,
+  warningAlert,
+  errorAlert,
+} from "../utils";
 
 const delImage = () => {
   doApi("/api/delImage", { url: deleteImage.value })
@@ -51,7 +19,76 @@ const delImage = () => {
       showDeleteDialog.value = false;
     });
 };
-
 </script>
 
+<template>
+  <div v-if="showDeleteDialog" class="fixed z-50 inset-0 overflow-y-auto">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+        <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+      </div>
+
+      <div
+        class="bg-white rounded-lg shadow-xl overflow-hidden transform transition-all sm:max-w-lg sm:w-full"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="delete-dialog-title"
+      >
+        <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+          <div class="sm:flex sm:items-start">
+            <div
+              class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+            >
+              <svg
+                class="h-6 w-6 text-red-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938-9.077l-2.29 2.29a1 1 0 001.414 1.414L19.708 13.708a1 1 0 001.414-1.414l-2.289-2.29c-.462-.462-.99-.717-1.585-.717H5.046c-.595 0-1.123.255-1.585.717z"
+                />
+              </svg>
+            </div>
+            <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+              <h3
+                class="text-lg leading-6 font-medium text-gray-900"
+                id="delete-dialog-title"
+              >
+                删除确认
+              </h3>
+              <div class="mt-2">
+                <p class="text-sm text-gray-500">
+                  确定删除当前选择的图片？删除后无法恢复！
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <button
+            type="button"
+            class="ml-2 w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+            @click="delImage"
+          >
+            Confirm
+          </button>
+          <button
+            type="button"
+            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+            @click="showDeleteDialog = false"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style scoped></style>
+```

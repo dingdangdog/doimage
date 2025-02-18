@@ -1,51 +1,34 @@
+<script setup lang="ts">
+const { image } = defineProps<{ image?: string }>();
+const loading = ref(true);
+
+const onLoad = () => {
+  loading.value = false;
+};
+</script>
+
 <template>
-  <div class="image-div">
-    <v-img :src="image" aspect-ratio="1" class="image">
-      <template v-slot:placeholder>
-        <v-row class="fill-height ma-0" justify="center" align="center">
-          <v-progress-circular
-            color="grey-lighten-5"
-            indeterminate
-          ></v-progress-circular>
-        </v-row>
-      </template>
-    </v-img>
+  <div class="m-2 w-[10rem] h-[8rem] border border-[#f6467c] rounded-sm">
+    <div
+      class="relative image bg-[rgba(242,197,211,0.5)] p-2 rounded-sm cursor-pointer overflow-hidden"
+    >
+      <img
+        v-if="!loading"
+        :src="image"
+        alt="image card"
+        class="aspect-square w-full h-full object-cover rounded-sm"
+        @load="onLoad"
+      />
+      <div
+        v-if="loading"
+        class="absolute inset-0 flex justify-center items-center rounded-sm bg-gray-100"
+      >
+        <div
+          class="w-12 h-12 h-12 border-b-2 border-gray-300 border-opacity-50 rounded-full animate-spin"
+        ></div>
+      </div>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
-const { image } = defineProps(["image"]);
-// console.log(image)
-</script>
-
-<style scoped>
-.image-div {
-  margin: 0.5rem;
-  width: 10rem;
-  height: 8rem;
-  border: 1px solid #f6467c;
-  border-radius: 0.2rem;
-}
-
-.image {
-  background-color: rgba(242, 197, 211, 0.5);
-  padding: 0.5rem;
-  border-radius: 0.2rem;
-  cursor: pointer;
-}
-
-@media screen and (max-width: 1080px) {
-  .image-div {
-    width: 8rem;
-    height: 7rem;
-  }
-}
-
-
-@media screen and (max-width: 720px) {
-  .image-div {
-    width: 7rem;
-    height: 7rem;
-  }
-}
-</style>
+<style scoped></style>

@@ -1,29 +1,15 @@
 <template>
-  <div
-    class="donate-page"
-    style="max-width: 1280px; margin: 0 auto; padding: 0.5rem"
-  >
-    <iframe src="https://oldmoon.top/idonate" class=""></iframe>
+  <div class="max-w-4xl mx-auto h-full">
+    <iframe
+      :src="`https://oldmoon.top${locale ? '/' + locale : ''}/idonate`"
+      class="w-full h-full"
+    ></iframe>
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+// 获取i18n的当前code
+const { locale } = useI18n();
+</script>
 
-<style scoped>
-.donate-page p {
-  margin: 0.5rem 0;
-}
-
-h2,
-h3 {
-  margin: 1rem 0;
-}
-
-.donate-image {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
-</style>
+<style scoped></style>

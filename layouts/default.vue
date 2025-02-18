@@ -1,140 +1,30 @@
-<template>
-  <v-layout class="rounded rounded-md">
-    <!-- <v-navigation-drawer>
-      <v-list>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-navigation-drawer location="right">
-      <v-list>
-      </v-list>
-    </v-navigation-drawer> -->
-
-    <v-app-bar color="rgba(242, 197, 211, 0.5)" :elevation="2">
-      <template v-slot:prepend>
-        <v-img :width="40" aspect-ratio="1/1" cover src="/Doimage.png"></v-img>
-        <h2 class="title">{{ $t("title") }}</h2>
-      </template>
-
-      <v-app-bar-title>
-        <v-tabs v-model="tab" color="rgba(246, 70, 124)">
-          <v-tab value="login" @click="toPage('login')">
-            <h3>{{ $t("menu.login") }}</h3>
-          </v-tab>
-          <v-tab value="upload" @click="toPage('upload')">
-            <h3>{{ $t("menu.upload") }}</h3>
-          </v-tab>
-          <v-tab value="store" @click="toPage('store')">
-            <h3>{{ $t("menu.store") }}</h3>
-          </v-tab>
-          <v-tab value="donate" @click="toPage('donate')">
-            <h3>Donate</h3>
-          </v-tab>
-        </v-tabs>
-      </v-app-bar-title>
-
-      <template v-slot:append>
-        <v-tooltip text="Change to English" v-if="locale == 'zh'">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              v-bind="props"
-              color="rgb(246, 70, 124)"
-              icon="mdi-alpha-e-box-outline"
-              size="large"
-              @click="changeLang"
-              class="exit-icon"
-            ></v-icon>
-          </template>
-        </v-tooltip>
-
-        <v-tooltip text="切换中文" v-if="locale != 'zh'">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              v-bind="props"
-              color="rgb(246, 70, 124)"
-              icon="mdi-translate"
-              size="large"
-              @click="changeLang"
-              class="exit-icon"
-            ></v-icon>
-          </template>
-        </v-tooltip>
-
-        <v-tooltip text="To Github">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              v-bind="props"
-              color="#f6467c"
-              size="large"
-              @click="toGithub"
-              class="exit-icon"
-            >
-              <template v-slot:default>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path
-                    fill="#f6467c"
-                    d="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"
-                  />
-                </svg>
-              </template>
-            </v-icon>
-          </template>
-        </v-tooltip>
-
-        <v-tooltip text="Logout">
-          <template v-slot:activator="{ props }">
-            <v-icon
-              v-bind="props"
-              color="#f6467c"
-              icon="mdi-exit-to-app"
-              size="large"
-              @click="logout"
-              class="exit-icon"
-            ></v-icon>
-          </template>
-        </v-tooltip>
-      </template>
-    </v-app-bar>
-
-    <v-main>
-      <div v-show="loading" style="text-align: center; padding-top: 10vh">
-        Loading
-      </div>
-      <div v-show="!loading" style="height: 100%"><slot></slot></div>
-      <GlobalAlert />
-    </v-main>
-  </v-layout>
-</template>
-
 <script setup lang="ts">
+import { warningAlert } from "../utils";
+
 const loading = ref(true);
 onMounted(() => {
   loading.value = false;
 });
 
-import { useRoute } from "vue-router";
-const { locale, locales, setLocale } = useI18n();
-
+const router = useRouter();
 const route = useRoute();
-const tab = ref(route.path == "/" ? "login" : route.path.replace("/", ""));
+const { locale, setLocale } = useI18n();
+
+const tab = ref(route.path === "/" ? "login" : route.path.replace("/", ""));
 
 const toPage = (path: string) => {
   tab.value = path;
-  if (path == "login") {
-    path = "/";
-  }
-  navigateTo(path);
-  // tab.value = path == "/" ? "login" : path;
+  router.push(path === "login" ? "/" : `/${path}`);
 };
 
 const logout = () => {
   warningAlert("Logout");
   window.localStorage.removeItem("key");
-  navigateTo(`/`);
+  router.push(`/`);
 };
 
 const changeLang = () => {
-  setLocale(locale.value == "zh" ? "en" : "zh");
+  setLocale(locale.value === "zh" ? "en" : "zh");
 };
 
 const toGithub = () => {
@@ -142,18 +32,114 @@ const toGithub = () => {
 };
 </script>
 
-<style scoped>
-@media screen and (max-width: 1280px) {
-  .title {
-    display: none;
-  }
-}
+<template>
+  <div class="rounded-md flex flex-col h-screen">
+    <header
+      class="bg-[rgba(242,197,211,0.5)] shadow-md flex justify-between items-center p-4 rounded-t-md"
+    >
+      <div class="flex items-center">
+        <img
+          :src="'/Doimage.png'"
+          :width="40"
+          class="aspect-square object-cover mr-2"
+          alt="Logo"
+        />
+        <h2 class="hidden lg:block font-bold text-xl text-gray-800">
+          {{ $t("title") }}
+        </h2>
+      </div>
 
-.exit-icon {
-  margin: 0.5rem;
-  cursor: pointer;
-}
-.exit-icon:hover {
-  border: 1 solid #f6467c;
-}
-</style>
+      <nav class="hidden md:flex space-x-4">
+        <button
+          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'login' }"
+          @click="toPage('login')"
+        >
+          {{ $t("menu.login") }}
+        </button>
+        <button
+          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'upload' }"
+          @click="toPage('upload')"
+        >
+          {{ $t("menu.upload") }}
+        </button>
+        <button
+          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'store' }"
+          @click="toPage('store')"
+        >
+          {{ $t("menu.store") }}
+        </button>
+        <button
+          class="text-gray-700 hover:text-white hover:bg-[rgba(246,70,124,0.7)] px-3 py-2 rounded-md text-sm font-medium focus:outline-none"
+          :class="{ 'bg-[rgba(246,70,124)] text-white': tab === 'donate' }"
+          @click="toPage('donate')"
+        >
+          Donate
+        </button>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <div class="relative" v-if="locale == 'zh'">
+          <!-- <span
+            class="absolute hidden bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 group-hover:block"
+            >Change to English</span
+          > -->
+          <button
+            @click="changeLang"
+            title="Change to English"
+            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+          >
+            En
+          </button>
+        </div>
+        <div class="relative" v-else>
+          <!-- <span
+            class="absolute hidden bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 group-hover:block"
+            >切换中文</span
+          > -->
+          <button
+            @click="changeLang"
+            title="切换简体中文"
+            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+          >
+            简
+          </button>
+        </div>
+
+        <div class="relative">
+          <span
+            class="absolute hidden bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 group-hover:block"
+            >To Github</span
+          >
+          <button
+            @click="toGithub"
+            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+          >
+            <IconGithub class="w-8 h-8" :color="`rgb(243 244 246)`" />
+          </button>
+        </div>
+
+        <div class="relative">
+          <span
+            class="absolute hidden bg-gray-800 text-white text-xs rounded py-1 px-2 w-max bottom-full left-1/2 -translate-x-1/2 mb-1 z-10 group-hover:block"
+            >Logout</span
+          >
+          <button
+            @click="logout"
+            class="group relative m-1 p-2 cursor-pointer rounded-full hover:bg-[rgba(246,70,124,0.2)] focus:outline-none"
+          >
+            <IconExit class="w-8 h-8" color="#f6467c" />
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow overflow-auto">
+      <div v-show="loading" class="text-center pt-[10vh]">Loading</div>
+      <div v-show="!loading" class="h-full"><slot></slot></div>
+      <GlobalAlert />
+    </main>
+  </div>
+</template>
