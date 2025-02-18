@@ -231,7 +231,7 @@ const getImages = () => {
             @click="jumpPageDialog = true"
             class="text-sm text-pink-500 cursor-pointer focus:outline-none hover:underline"
           >
-            跳页
+            {{ $t("page.jump") }}
           </button>
         </div>
       </div>
@@ -244,7 +244,7 @@ const getImages = () => {
     >
       <div class="bg-white rounded-lg p-6 shadow-xl min-w-[20rem] max-w-lg">
         <h3 class="text-lg font-semibold text-gray-900 mb-2">
-          {{ $t("store.jump-page") }}
+          {{ $t("page.jump") }}
         </h3>
         <div class="mb-4">
           <input

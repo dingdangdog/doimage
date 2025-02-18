@@ -3,23 +3,24 @@
   "menu": {
     "login": "Login",
     "upload": "Upload",
-    "store": "Store"
+    "store": "Store",
+    "donate": "Donate"
   },
   "login": {
     "login": "Login",
     "key": "Key"
   },
   "upload": {
+    "title": "Upload Settings",
     "select-folder": "Select Store Folder",
     "select-image": "Select Images",
     "watermark": "WaterMark Info",
-    "setmark": "Set Mark",
-    "unsetmark": "UnSet Mark",
+    "watermark_set": "Add Watermark",
     "upload": "Upload",
     "file": "File",
     "upload-result": "Upload result display area",
     "add-folder": "Add Folder",
-    "folder-name": "Folder Name"
+    "folder-name": "Please input Folder Name"
   },
   "store": {
     "select-folder": "Select Store Folder",
@@ -31,11 +32,16 @@
     "cancel": "Cancel",
     "confirm": "Confirm",
     "add": "Add",
-    "submit": "Submit"
+    "submit": "Submit",
+    "yes": "Yes",
+    "no": "No",
+    "or": "Or",
+    "put": "Put in"
   },
   "page": {
     "total": "Total",
     "size": "Page Size",
-    "num": "Page Num"
+    "num": "Page Num",
+    "jump": "JumpPage"
   }
 }

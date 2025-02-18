@@ -3,40 +3,45 @@
   "menu": {
     "login": "登录",
     "upload": "上传",
-    "store": "图库"
+    "store": "图库",
+    "donate": "捐赠"
   },
   "login": {
     "login": "登录",
     "key": "密钥"
   },
   "upload": {
+    "title": "上传设置",
     "select-folder": "选择存储文件夹",
     "select-image": "选择图片",
     "watermark": "水印内容",
-    "setmark": "设置水印",
-    "unsetmark": "不设置水印",
+    "watermark_set": "是否添加水印",
     "upload": "上传",
     "file": "文件",
     "upload-result": "上传结果显示区",
 
     "add-folder": "新增文件夹",
-    "folder-name": "文件夹名"
+    "folder-name": "请输入文件夹名"
   },
   "store": {
     "select-folder": "选择存储文件夹",
     "refresh": "刷新",
-    "jump-page": "跳转到页",
     "images-container": "图片展示区，首次进入请点击刷新按钮"
   },
   "common": {
     "cancel": "取消",
     "confirm": "确定",
     "add": "新增",
-    "submit": "提交"
+    "submit": "提交",
+    "yes": "是",
+    "no": "否",
+    "or": "或",
+    "put": "拖拽放入"
   },
   "page": {
     "total": "总数",
     "size": "数量",
-    "num": "页码"
+    "num": "页码",
+    "jump": "跳页"
   }
 }

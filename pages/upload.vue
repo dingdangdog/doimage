@@ -160,11 +160,16 @@ onMounted(() => {
     <div
       class="max-w-5xl w-full mx-auto p-2 md:p-6 bg-pink-50 rounded-xl shadow-lg space-y-3 flex-grow"
     >
-      <h3 class="text-xl font-semibold text-gray-900">上传配置</h3>
+      <h3 class="text-xl font-semibold text-gray-900">
+        {{ $t("upload.title") }}
+      </h3>
       <!-- 水印设置 -->
       <div>
-        <label for="watermark" class="block text-sm font-semibold text-pink-700"
-          >水印内容</label
+        <label
+          for="watermark"
+          class="block text-sm font-semibold text-pink-700"
+        >
+          {{ $t("upload.watermark") }}</label
         >
         <input
           type="text"
@@ -178,7 +183,7 @@ onMounted(() => {
       <div class="flex flex-col md:flex-row justify-between md:space-x-4">
         <fieldset class="p-4 border border-pink-300 rounded-lg bg-white">
           <legend class="text-sm font-semibold text-pink-700">
-            是否添加水印
+            {{ $t("upload.watermark_set") }}
           </legend>
           <div class="mt-3 flex space-x-6">
             <label class="flex items-center space-x-2 cursor-pointer">
@@ -189,7 +194,9 @@ onMounted(() => {
                 v-model="addWatermark"
                 class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
               />
-              <span class="text-gray-700 text-sm font-medium">是</span>
+              <span class="text-gray-700 text-sm font-medium">
+                {{ $t("common.yes") }}</span
+              >
             </label>
             <label class="flex items-center space-x-2 cursor-pointer">
               <input
@@ -199,7 +206,9 @@ onMounted(() => {
                 v-model="addWatermark"
                 class="h-4 w-4 text-pink-600 border-gray-300 focus:ring-pink-500"
               />
-              <span class="text-gray-700 text-sm font-medium">否</span>
+              <span class="text-gray-700 text-sm font-medium">{{
+                $t("common.no")
+              }}</span>
             </label>
           </div>
         </fieldset>
@@ -209,13 +218,13 @@ onMounted(() => {
             <label
               for="folderSelect"
               class="block text-sm font-semibold text-pink-700"
-              >选择上传文件夹</label
+              >{{ $t("upload.select-folder") }}</label
             >
             <button
               class="px-4 py-2 text-sm font-medium text-white bg-pink-500 rounded-lg shadow-md hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-400"
               @click="showAddFolder"
             >
-              新建文件夹
+              {{ $t("upload.add-folder") }}
             </button>
           </div>
           <select
@@ -260,13 +269,13 @@ onMounted(() => {
         >
           <p>
             <!-- {{ $t("watermark.upload-tip") }} -->
-            拖拽或
+            {{ $t("common.put") }} {{ $t("common.or") }}
             <button
               type="button"
               @click.stop="$refs.fileInput.click()"
               class="text-purple-800 font-semibold hover:text-purple-700 focus:outline-none"
             >
-              选择图片
+              {{ $t("upload.select-image") }}
             </button>
           </p>
           <p class="text-sm mt-2"></p>
@@ -294,9 +303,9 @@ onMounted(() => {
       </div>
 
       <div class="bg-white shadow-lg rounded-lg mb-8">
-        <div class="p-6 border-b border-gray-200 bg-gray-100">
+        <!-- <div class="p-6 border-b border-gray-200 bg-gray-100">
           <h3 class="text-xl font-semibold text-gray-900">上传结果</h3>
-        </div>
+        </div> -->
         <!-- Result Display -->
         <div class="bg-white overflow-hidden shadow-lg rounded-lg mb-8">
           <div class="p-6">
